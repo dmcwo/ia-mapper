@@ -1,0 +1,555 @@
+/* =============================================================================
+   THEME 2: MEGA-NAV WITH INTERACTIVE PANELS
+   Inspired by: Library sites with contextual utility actions (Ask, Hours, Search)
+   Pattern: Single-row nav where some items open rich interactive panels
+             rather than simple link lists.
+
+   HTML STRUCTURE EXPECTED:
+   ─────────────────────────
+   <header class="site-header" role="banner">
+     <div class="primary-header">
+       <div class="primary-header__inner">
+
+         <a class="site-logo" href="/">
+           <img class="site-logo__img" src="logo.svg" alt="Site Name" />
+         </a>
+
+         <nav class="primary-nav" aria-label="Primary navigation" id="primary-nav">
+           <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav-list">
+             <span class="nav-toggle__icon"></span>
+             <span class="sr-only">Menu</span>
+           </button>
+
+           <ul class="primary-nav__list" id="primary-nav-list">
+             <!-- Standard dropdown -->
+             <li class="primary-nav__item primary-nav__item--has-panel">
+               <button class="primary-nav__link primary-nav__link--trigger"
+                       aria-expanded="false" aria-controls="panel-help">
+                 Help with...
+               </button>
+               <div class="nav-panel" id="panel-help" aria-hidden="true">
+                 <div class="nav-panel__inner">
+                   <ul class="nav-panel__list">
+                     <li><a class="nav-panel__link" href="#">All Services</a></li>
+                     <li><a class="nav-panel__link" href="#">Alumni Access</a></li>
+                     <li><a class="nav-panel__link" href="#">Borrowing</a></li>
+                   </ul>
+                 </div>
+               </div>
+             </li>
+
+             <!-- Panel with utility action -->
+             <li class="primary-nav__item primary-nav__item--has-panel primary-nav__item--action">
+               <button class="primary-nav__link primary-nav__link--trigger primary-nav__link--action"
+                       aria-expanded="false" aria-controls="panel-ask">
+                 Ask
+               </button>
+               <div class="nav-panel nav-panel--action" id="panel-ask" aria-hidden="true">
+                 <div class="nav-panel__inner">
+                   <div class="action-panel">
+                     <label class="action-panel__label" for="ask-input">Ask a librarian</label>
+                     <div class="action-panel__input-row">
+                       <input class="action-panel__input" id="ask-input" type="text"
+                              placeholder="Your question...">
+                       <button class="action-panel__submit" type="submit">Go</button>
+                     </div>
+                     <ul class="action-panel__links">
+                       <li><a href="#">Find my subject liaison</a></li>
+                       <li><a href="#">Request a research appointment</a></li>
+                     </ul>
+                   </div>
+                 </div>
+               </div>
+             </li>
+
+             <!-- Hours panel -->
+             <li class="primary-nav__item primary-nav__item--has-panel">
+               <button class="primary-nav__link primary-nav__link--trigger"
+                       aria-expanded="false" aria-controls="panel-hours">
+                 Hours
+               </button>
+               <div class="nav-panel nav-panel--hours" id="panel-hours" aria-hidden="true">
+                 <div class="nav-panel__inner">
+                   <h3 class="hours-panel__heading">Today</h3>
+                   <ul class="hours-panel__list">
+                     <li class="hours-panel__item">
+                       <span class="hours-panel__location">Main Library</span>
+                       <span class="hours-panel__time">9am – 10pm</span>
+                     </li>
+                     <li class="hours-panel__item">
+                       <span class="hours-panel__location">Branch Library</span>
+                       <span class="hours-panel__time">Closed</span>
+                     </li>
+                   </ul>
+                   <a class="hours-panel__all-link" href="#">All locations & hours</a>
+                 </div>
+               </div>
+             </li>
+
+             <!-- CTA account link -->
+             <li class="primary-nav__item primary-nav__item--account">
+               <a class="primary-nav__link primary-nav__link--cta" href="#">
+                 Sign in
+               </a>
+             </li>
+           </ul>
+         </nav>
+       </div>
+     </div>
+   </header>
+   ============================================================================= */
+
+/* ── Custom Properties ─────────────────────────────────────────────────────── */
+:root {
+  --nav-primary-bg: #ffffff;
+  --nav-primary-border: 1px solid #d9d9d9;
+  --nav-primary-height: 60px;
+  --nav-primary-font-size: 0.9375rem;
+  --nav-primary-font-weight: 500;
+  --nav-primary-link: #1a1a1a;
+  --nav-primary-link-hover-bg: rgba(0, 0, 0, 0.06);
+  --nav-primary-active-indicator: #a51c30;
+
+  --nav-logo-max-height: 48px;
+
+  --nav-panel-bg: #ffffff;
+  --nav-panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --nav-panel-border: 1px solid #eeeeee;
+  --nav-panel-border-top: 3px solid #a51c30;
+  --nav-panel-font-size: 0.875rem;
+  --nav-panel-link: #1a1a1a;
+  --nav-panel-link-hover: #a51c30;
+  --nav-panel-min-width: 240px;
+  --nav-panel-padding: 1.25rem;
+
+  --nav-action-bg: #f7f7f7;
+  --nav-action-border: 1px solid #cccccc;
+  --nav-action-radius: 4px;
+  --nav-action-input-height: 38px;
+
+  --nav-cta-bg: #a51c30;
+  --nav-cta-text: #ffffff;
+  --nav-cta-radius: 4px;
+  --nav-cta-padding: 0.375rem 1rem;
+
+  --nav-hours-closed: #cc0000;
+  --nav-hours-open: #2a7a2a;
+
+  --nav-focus-outline: 2px solid #a51c30;
+  --nav-focus-offset: 2px;
+
+  --nav-hamburger-size: 22px;
+  --nav-mobile-bg: #ffffff;
+  --nav-mobile-item-border: 1px solid #eeeeee;
+  --nav-overlay-bg: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+.site-header *,
+.site-header *::before,
+.site-header *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header ul { list-style: none; }
+.site-header a  { text-decoration: none; color: inherit; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ── Primary Header ────────────────────────────────────────────────────────── */
+.primary-header {
+  background-color: var(--nav-primary-bg);
+  border-bottom: var(--nav-primary-border);
+  position: relative;
+  z-index: 100;
+}
+
+.primary-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-primary-height);
+}
+
+/* ── Logo ──────────────────────────────────────────────────────────────────── */
+.site-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.site-logo__img {
+  max-height: var(--nav-logo-max-height);
+  width: auto;
+}
+
+.site-logo:focus-visible {
+  outline: var(--nav-focus-outline);
+  outline-offset: var(--nav-focus-offset);
+  border-radius: 2px;
+}
+
+/* ── Primary Nav ───────────────────────────────────────────────────────────── */
+.primary-nav {
+  display: flex;
+  align-items: center;
+}
+
+.primary-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: var(--nav-primary-height);
+}
+
+.primary-nav__item {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.primary-nav__link {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: var(--nav-primary-font-size);
+  font-weight: var(--nav-primary-font-weight);
+  color: var(--nav-primary-link);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.primary-nav__link:hover,
+.primary-nav__link:focus-visible {
+  background-color: var(--nav-primary-link-hover-bg);
+}
+
+.primary-nav__link--trigger[aria-expanded="true"] {
+  border-bottom-color: var(--nav-primary-active-indicator);
+  background-color: var(--nav-primary-link-hover-bg);
+}
+
+.primary-nav__link:focus-visible {
+  outline: var(--nav-focus-outline);
+  outline-offset: var(--nav-focus-offset);
+  border-radius: 2px;
+}
+
+/* ── CTA / Account link ────────────────────────────────────────────────────── */
+.primary-nav__link--cta {
+  background-color: var(--nav-cta-bg);
+  color: var(--nav-cta-text);
+  border-radius: var(--nav-cta-radius);
+  padding: var(--nav-cta-padding);
+  margin: 0 0.5rem;
+  align-self: center;
+  height: auto;
+  border-bottom: none;
+}
+
+.primary-nav__link--cta:hover {
+  background-color: color-mix(in srgb, var(--nav-cta-bg) 85%, black);
+}
+
+/* ── Nav Panels ────────────────────────────────────────────────────────────── */
+.nav-panel {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  background-color: var(--nav-panel-bg);
+  min-width: var(--nav-panel-min-width);
+  border: var(--nav-panel-border);
+  border-top: var(--nav-panel-border-top);
+  box-shadow: var(--nav-panel-shadow);
+  z-index: 200;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.nav-panel[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.nav-panel__inner {
+  padding: var(--nav-panel-padding);
+}
+
+.nav-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-panel__link {
+  display: block;
+  padding: 0.5rem 0.375rem;
+  font-size: var(--nav-panel-font-size);
+  color: var(--nav-panel-link);
+  border-bottom: 1px solid #f2f2f2;
+  transition: color 0.15s ease, padding-left 0.15s ease;
+}
+
+.nav-panel__link:hover,
+.nav-panel__link:focus-visible {
+  color: var(--nav-panel-link-hover);
+  padding-left: 0.75rem;
+}
+
+.nav-panel__link:focus-visible {
+  outline: var(--nav-focus-outline);
+  outline-offset: var(--nav-focus-offset);
+}
+
+/* ── Action Panel (Ask / Search) ───────────────────────────────────────────── */
+.nav-panel--action {
+  min-width: 320px;
+}
+
+.action-panel__label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--nav-panel-link);
+}
+
+.action-panel__input-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1rem;
+}
+
+.action-panel__input {
+  flex: 1;
+  height: var(--nav-action-input-height);
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  border: var(--nav-action-border);
+  border-right: none;
+  border-radius: var(--nav-action-radius) 0 0 var(--nav-action-radius);
+  background: var(--nav-action-bg);
+}
+
+.action-panel__input:focus-visible {
+  outline: var(--nav-focus-outline);
+  outline-offset: -1px;
+}
+
+.action-panel__submit {
+  height: var(--nav-action-input-height);
+  padding: 0 1rem;
+  background-color: var(--nav-primary-active-indicator);
+  color: #fff;
+  border: none;
+  border-radius: 0 var(--nav-action-radius) var(--nav-action-radius) 0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+.action-panel__submit:hover { opacity: 0.85; }
+
+.action-panel__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.action-panel__links a {
+  font-size: 0.8125rem;
+  color: var(--nav-panel-link-hover);
+  text-decoration: underline;
+}
+
+/* ── Hours Panel ───────────────────────────────────────────────────────────── */
+.nav-panel--hours {
+  min-width: 280px;
+}
+
+.hours-panel__heading {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+.hours-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.hours-panel__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--nav-panel-font-size);
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+.hours-panel__location {
+  font-weight: 500;
+}
+
+.hours-panel__time {
+  font-size: 0.8125rem;
+  color: var(--nav-hours-open);
+}
+
+.hours-panel__time--closed {
+  color: var(--nav-hours-closed);
+}
+
+.hours-panel__all-link {
+  font-size: 0.8125rem;
+  color: var(--nav-panel-link-hover);
+  text-decoration: underline;
+}
+
+/* ── Hamburger (mobile) ────────────────────────────────────────────────────── */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-toggle__icon,
+.nav-toggle__icon::before,
+.nav-toggle__icon::after {
+  display: block;
+  width: var(--nav-hamburger-size);
+  height: 2px;
+  background-color: var(--nav-primary-link);
+  position: relative;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle__icon::before,
+.nav-toggle__icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle__icon::before { top: -7px; }
+.nav-toggle__icon::after  { top: 7px; }
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon { background-color: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::before { transform: rotate(45deg) translate(5px, 5px); }
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::after  { transform: rotate(-45deg) translate(5px, -5px); }
+
+.nav-toggle:focus-visible {
+  outline: var(--nav-focus-outline);
+  outline-offset: var(--nav-focus-offset);
+  border-radius: 2px;
+}
+
+/* ── Responsive: Mobile ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .primary-header__inner {
+    height: 60px;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .primary-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--nav-mobile-bg);
+    border-top: var(--nav-primary-border);
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .primary-nav.is-open {
+    display: flex;
+  }
+
+  .primary-nav__list {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .primary-nav__item {
+    flex-direction: column;
+    border-bottom: var(--nav-mobile-item-border);
+  }
+
+  .primary-nav__link {
+    padding: 0.875rem 1.25rem;
+    height: auto;
+    border-bottom: none;
+    justify-content: space-between;
+    font-size: 1rem;
+  }
+
+  .primary-nav__link--cta {
+    margin: 0.75rem 1.25rem;
+    align-self: flex-start;
+  }
+
+  /* Panels become accordion-style below their trigger */
+  .nav-panel {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    border: none;
+    border-top: none;
+    border-left: 3px solid var(--nav-primary-active-indicator);
+    box-shadow: none;
+    margin-left: 1rem;
+    display: none;
+    transition: none;
+  }
+
+  .nav-panel[aria-hidden="false"] {
+    display: block;
+  }
+
+  .nav-panel--action {
+    min-width: 0;
+  }
+}

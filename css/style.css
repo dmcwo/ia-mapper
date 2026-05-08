@@ -1,0 +1,1347 @@
+/* ═══════════════════════════════════════════════════════════════
+   IA Helper — Stylesheet
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --c-bg:            #F4F6F9;
+  --c-surface:       #FFFFFF;
+  --c-border:        #DDE3EC;
+  --c-border-strong: #B8C4D4;
+  --c-text:          #1C2333;
+  --c-text-muted:    #4F5E7B;
+  --c-accent:        #3B7DD8;
+  --c-accent-light:  #EAF2FF;
+  --c-accent-dark:   #2860B0;
+  --c-amber:         #F59E0B;
+  --c-amber-light:   #FFFBEB;
+  --c-danger:        #DC2626;
+  --c-danger-light:  #FEF2F2;
+  --c-green:         #16A34A;
+  --c-nested-bg:     #F0F7FF;
+
+  --shadow-xs: 0 1px 2px rgba(28,35,51,.06);
+  --shadow-sm: 0 2px 6px rgba(28,35,51,.08), 0 1px 2px rgba(28,35,51,.05);
+  --shadow-md: 0 4px 16px rgba(28,35,51,.10), 0 2px 4px rgba(28,35,51,.06);
+  --shadow-lift: 0 8px 24px rgba(28,35,51,.16);
+
+  --r-sm:  4px;
+  --r-md:  8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --t-fast:   120ms ease;
+  --t-normal: 200ms ease;
+  --t-slow:   280ms ease;
+
+  --eb-width: 288px;
+  --header-h: 52px;
+  --preview-h: 230px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font);
+  color: var(--c-text);
+  background: var(--c-bg);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+textarea, input { font-family: inherit; font-size: inherit; }
+kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: .75em;
+  font-family: ui-monospace, monospace;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border-strong);
+  border-radius: 3px;
+  box-shadow: 0 1px 0 var(--c-border-strong);
+  white-space: nowrap;
+}
+dialog { border: none; border-radius: var(--r-lg); padding: 0; box-shadow: var(--shadow-md); }
+dialog::backdrop { background: rgba(28,35,51,.45); }
+/* Ensure the HTML `hidden` attribute is never overridden by CSS display rules */
+[hidden] { display: none !important; }
+
+/* ── Utilities ──────────────────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.hint-text { font-size: .75rem; color: var(--c-text-muted); margin-top: 4px; }
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: var(--r-sm);
+  font-size: .85rem; font-weight: 500; line-height: 1;
+  transition: background var(--t-fast), color var(--t-fast), opacity var(--t-fast), box-shadow var(--t-fast);
+  color: var(--c-text-muted);
+  border: 1px solid transparent;
+}
+.btn:hover:not(:disabled) { background: var(--c-bg); color: var(--c-text); }
+.btn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn--primary {
+  background: var(--c-accent); color: #fff; border-color: var(--c-accent-dark);
+}
+.btn--primary:hover:not(:disabled) { background: var(--c-accent-dark); color: #fff; }
+.btn--ghost { border: 1px solid var(--c-border); background: var(--c-surface); color: var(--c-text-muted); }
+.btn--ghost:hover:not(:disabled) { border-color: var(--c-border-strong); color: var(--c-text); }
+.btn--danger { background: var(--c-danger); color: #fff; border-color: #B91C1C; }
+.btn--danger-ghost { border-color: var(--c-danger); color: var(--c-danger); }
+.btn--danger-ghost:hover:not(:disabled) { background: var(--c-danger-light); color: var(--c-danger); }
+.btn--danger:hover:not(:disabled) { background: #B91C1C; color: #fff; }
+.btn--sm { padding: 4px 9px; font-size: .8rem; }
+.btn--full { width: 100%; justify-content: center; }
+.btn--icon span { font-size: 1em; }
+
+/* ── App layout ─────────────────────────────────────────────── */
+#app {
+  display: grid;
+  grid-template-rows: var(--header-h) var(--preview-h) 1fr;
+  grid-template-areas: "header" "preview" "workspace";
+  height: 100vh;
+  /* overflow visible lets preview dropdowns overlay the workspace */
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+#app-header {
+  grid-area: header;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  box-shadow: var(--shadow-xs);
+  z-index: 20;
+}
+.header-brand { display: flex; align-items: baseline; gap: 10px; }
+.app-name {
+  font-size: 1.1rem; font-weight: 700; letter-spacing: -.3px;
+  color: var(--c-accent);
+}
+.app-tagline { font-size: .78rem; color: var(--c-text-muted); }
+.header-actions { display: flex; align-items: center; gap: 6px; }
+
+/* ── Menu Preview ───────────────────────────────────────────── */
+#preview-section {
+  grid-area: preview;
+  display: flex; flex-direction: column;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  position: relative;
+  z-index: 10; /* sit above workspace so dropdowns overlay it */
+  overflow: visible;
+}
+.preview-bar {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 6px 16px 5px;
+  flex-shrink: 0;
+  background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+}
+.preview-bar__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.preview-bar__right { display: flex; align-items: center; gap: 8px; }
+.preview-title { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-muted); }
+
+/* ── Site name input ────────────────────────────────────────── */
+.preview-sitename { display: flex; align-items: center; }
+.preview-sitename__input {
+  height: 24px;
+  padding: 0 8px;
+  font-size: .8rem;
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  background: var(--c-surface);
+  color: var(--c-text);
+  width: 140px;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.preview-sitename__input:focus {
+  outline: none;
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 2px rgba(59,125,216,.18);
+}
+.preview-sitename__input::placeholder { color: var(--c-text-muted); }
+
+/* ── Theme switcher buttons ─────────────────────────────────── */
+.theme-switcher { display: flex; align-items: center; gap: 3px; }
+.preview-control-label {
+  font-size: .7rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--c-text-muted);
+  margin-right: 2px; white-space: nowrap;
+}
+.theme-btn {
+  padding: 2px 8px; font-size: .74rem; font-weight: 500;
+  border-radius: 4px; border: 1px solid var(--c-border);
+  background: var(--c-surface); color: var(--c-text-muted);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.theme-btn:hover { background: var(--c-bg); color: var(--c-text); }
+.theme-btn.active, .theme-btn[aria-pressed="true"] {
+  background: var(--c-accent); color: #fff; border-color: var(--c-accent-dark);
+}
+.theme-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* ── Preview option toggles (Utility bar / Mega menu) ───────── */
+.preview-opts { display: flex; align-items: center; gap: 3px; }
+.preview-opt-btn {
+  padding: 2px 8px; font-size: .74rem; font-weight: 500;
+  border-radius: 4px; border: 1px dashed var(--c-border);
+  background: var(--c-surface); color: var(--c-text-muted);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.preview-opt-btn:hover:not(:disabled) { background: var(--c-bg); color: var(--c-text); }
+.preview-opt-btn.active, .preview-opt-btn[aria-pressed="true"] {
+  background: var(--c-accent-light); color: var(--c-accent);
+  border-color: var(--c-accent); border-style: solid;
+}
+.preview-opt-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.preview-opt-btn:disabled { opacity: .35; cursor: default; }
+
+/* ── Viewport toggle ────────────────────────────────────────── */
+.viewport-toggle { display: flex; gap: 2px; }
+.vp-btn {
+  padding: 2px 9px; font-size: .74rem; font-weight: 500;
+  border-radius: 4px; border: 1px solid var(--c-border);
+  background: var(--c-surface); color: var(--c-text-muted);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.vp-btn:hover { background: var(--c-bg); color: var(--c-text); }
+.vp-btn.active, .vp-btn[aria-pressed="true"] {
+  background: var(--c-accent); color: #fff; border-color: var(--c-accent-dark);
+}
+.vp-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+#preview-frame {
+  flex: 1; overflow: visible;
+  padding: 0 16px 8px;
+  display: flex; align-items: flex-start;
+}
+/* Themed frames go edge-to-edge so the nav looks realistic */
+#preview-frame.themed {
+  padding: 0;
+  align-items: stretch;
+}
+#preview-frame.themed #preview-content {
+  overflow: visible;
+}
+#preview-content {
+  flex: 1;
+  overflow: visible; /* must not clip absolutely-positioned dropdowns */
+  transition: opacity var(--t-normal);
+}
+.preview-empty { font-size: .82rem; color: var(--c-text-muted); margin-top: 8px; font-style: italic; }
+
+/* ── Text logo placeholder for themed previews ──────────────── */
+.site-logo-text {
+  font-weight: 700; font-size: .95rem;
+  color: var(--nav-primary-link, #222);
+  letter-spacing: -.2px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MEGA MENU — UCLA-inspired three-tier header
+   Row 1: utility bar (white)
+   Row 2: mega-brand-row (white, logo only)
+   Row 3: mega-nav-row (dark, full-width equal-width nav items)
+   Panel: absolutely positioned below .mega-nav-row, same width
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Utility bar: white background for mega ────────────────────── */
+.site-header--mega .utility-bar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* ── Brand row ─────────────────────────────────────────────────── */
+.mega-brand-row {
+  background: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+}
+.mega-brand-row .site-logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #003b75;
+  letter-spacing: -0.01em;
+}
+
+/* ── Nav row: dark bar, full-width background, constrained content ── */
+.mega-nav-row {
+  background: var(--nav-mega-nav-bg, #003b75);
+  position: relative;
+  overflow: visible;   /* allow panel to escape below */
+  z-index: 100;
+}
+/* Inner wrapper constrains nav items to a readable max-width,
+   preventing text from running to the edges on wide monitors. */
+.mega-nav-row__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+}
+
+/* Nav fills the full inner wrapper width.
+   Must use #preview-frame.themed prefix (id specificity = 1) to beat
+   the global desktop-override rules in the "Force desktop layout" block. */
+#preview-frame.themed .site-header--mega .primary-nav {
+  width: 100% !important;
+}
+#preview-frame.themed .site-header--mega .primary-nav__list {
+  width: 100% !important;
+  height: 52px !important;
+}
+#preview-frame.themed .site-header--mega .primary-nav__item {
+  flex: 1 !important;
+}
+/* Link fills its item and centres text */
+#preview-frame.themed .site-header--mega .primary-nav__link {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 0 0.5rem !important;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .06em;
+  font-size: 0.8125rem !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  background: none !important;
+}
+#preview-frame.themed .site-header--mega .primary-nav__link:hover,
+#preview-frame.themed .site-header--mega .primary-nav__link:focus-visible {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, .08) !important;
+}
+/* Yellow underline on hover — overrides the theme's blue */
+#preview-frame.themed .site-header--mega .primary-nav__link::after {
+  background-color: var(--nav-mega-accent, #f0b429) !important;
+  height: 3px;
+}
+
+/* ── Mega panel ────────────────────────────────────────────────── */
+/* Positioning: absolute sibling of <nav> inside .mega-nav-row.
+   left:0/right:0 anchors it to the exact width of .mega-nav-row,
+   which is the same full width as the nav items above it.         */
+.preview-mega-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--nav-mega-bg, #1a3a5c);
+  border-top: 4px solid var(--nav-mega-accent, #f0b429);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+  z-index: 250;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+}
+/* Reveal on nav hover or panel self-hover */
+#preview-frame.themed .site-header--mega:has(.primary-nav--has-mega:hover) .preview-mega-panel,
+#preview-frame.themed .preview-mega-panel:hover {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Panel inner: same max-width and centering as .mega-nav-row__inner
+   so columns align with nav items above them. */
+.mega-panel__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 1.75rem 0 2.25rem;
+}
+
+/* Each column: flex:1 — matches the equal-width nav items above */
+.mega-col {
+  flex: 1;
+  padding: 0 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, .14);
+  overflow: hidden;   /* prevent any child from bleeding into adjacent column */
+}
+.mega-col:first-child { border-left: none; }
+
+/* Column header hidden — the nav item above IS the label */
+.mega-col__head { display: none; }
+
+.mega-col__list { list-style: none; padding: 0; margin: 0; }
+
+/* L2 links — matches UCLA: 16px / 600 / 1.2 line-height / .01em tracking
+   NO negative margin — that was causing the hover rect to bleed into the
+   adjacent column. Padding alone creates the inset click target.         */
+.site-header--mega .mega-col__link {
+  display: block;
+  padding: 1rem .6rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, .88) !important;
+  transition: background-color .12s ease, color .12s ease;
+  text-decoration: none;
+}
+.site-header--mega .mega-col__link:hover {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, .14) !important;
+  text-decoration: underline;
+}
+.mega-col__sub-arrow { font-size: .8em; opacity: .65; }
+
+/* ── Column dimming / active highlight (JS-driven) ─────────────── */
+.mega-panel--has-active .mega-col {
+  opacity: 0.42;
+  transition: opacity .15s ease;
+}
+.mega-col--active {
+  opacity: 1 !important;
+  transition: opacity .15s ease;
+}
+
+/* ── Force desktop layout in themed preview ─────────────────────
+   Theme CSS uses viewport-width media queries. We always want the
+   desktop nav layout in #preview-frame (mobile view uses our own
+   separate mobile builder and never loads theme CSS).
+   ─────────────────────────────────────────────────────────────── */
+#preview-frame.themed .primary-nav {
+  display: flex !important;
+  position: static !important;
+  flex-direction: row !important;
+  box-shadow: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  border-top: none !important;
+}
+#preview-frame.themed .nav-toggle     { display: none !important; }
+#preview-frame.themed .utility-bar    { display: block !important; }
+#preview-frame.themed .utility-strip  { display: block !important; }
+#preview-frame.themed .primary-nav__list {
+  flex-direction: row !important;
+  align-items: stretch !important;
+  height: var(--nav-primary-height, 56px) !important;
+  width: auto !important;
+}
+#preview-frame.themed .primary-nav__item {
+  flex-direction: row !important;
+  border-bottom: none !important;
+}
+#preview-frame.themed .primary-nav__link {
+  justify-content: flex-start !important;
+  height: auto !important;
+  font-size: var(--nav-primary-font-size, .9375rem) !important;
+  padding: 0 1rem !important;
+}
+#preview-frame.themed .primary-nav__link::after { display: block !important; }
+/* Restore dropdown positioning (mobile turns it static/accordion) */
+#preview-frame.themed .dropdown-menu {
+  position: absolute !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-4px) !important;
+  border-left: none !important;
+  margin-left: 0 !important;
+  display: block !important;
+  /* Fast exit: no linger so previous dropdown vanishes immediately on hover-out */
+  transition: opacity .1s ease, transform .1s ease, visibility 0s linear .1s !important;
+}
+/* Only :hover, only DIRECT child dropdown (> combinator prevents nested
+   .dropdown-menu--sub elements from all showing simultaneously) */
+#preview-frame.themed .primary-nav__item--has-dropdown:hover > .dropdown-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  transition-delay: 0s !important;
+}
+/* Raise the currently-hovered item so its dropdown is always on top */
+#preview-frame.themed .primary-nav__item--has-dropdown:hover {
+  z-index: 301 !important;
+}
+
+/* ── Two-tier theme: slim utility bar above the Default nav ─── */
+.preview-util-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.25rem;
+  height: 36px;
+  padding: 0 16px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  margin-bottom: -1px; /* merge border with pnav-wrapper border */
+}
+.preview-util-link {
+  font-size: .9rem;
+  color: #444;
+  white-space: nowrap;
+  cursor: default;
+  transition: color .1s;
+}
+.preview-util-link:hover { color: #111; text-decoration: underline; }
+/* Adjust pnav-wrapper top corners when utility bar is present */
+.preview-util-bar + .pnav-wrapper {
+  border-radius: 0 0 var(--r-md) var(--r-md);
+}
+
+/* ── Themed dropdown: cascading flyout for nested items ─────────── */
+.dropdown-menu__link--has-sub {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.dropdown-sub-arrow { font-size: .9em; margin-left: .375rem; opacity: .7; flex-shrink: 0; }
+
+/* Sub-menu panel that flies out to the right */
+#preview-frame.themed .dropdown-menu__item--has-sub { position: relative !important; }
+#preview-frame.themed .dropdown-menu--sub {
+  position: absolute !important;
+  top: -1px !important;
+  left: 100% !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateX(-4px) !important;
+  transition: opacity .1s ease, transform .1s ease, visibility 0s linear .1s !important;
+}
+#preview-frame.themed .dropdown-menu__item--has-sub:hover > .dropdown-menu--sub {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(0) !important;
+  transition-delay: 0s !important;
+  z-index: 302 !important;
+}
+/* Smart flip: sub-menu opens LEFT when right edge would overflow the preview frame */
+#preview-frame.themed .dropdown-menu--sub.flip-left {
+  left: auto !important;
+  right: 100% !important;
+  transform: translateX(4px) !important;
+}
+#preview-frame.themed .dropdown-menu__item--has-sub:hover > .dropdown-menu--sub.flip-left {
+  transform: translateX(0) !important;
+}
+
+/* ── Theme 2 panel: section groups + sub-links ──────────────── */
+.nav-panel__item--group { list-style: none; margin-bottom: .25rem; }
+.nav-panel__group-head {
+  display: block;
+  padding: .45rem .375rem .3rem;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--nav-panel-link-hover, var(--c-accent));
+  border-bottom: 2px solid currentColor;
+  margin-bottom: .1rem;
+  border-top: 1px solid rgba(0,0,0,.07);
+  margin-top: .35rem;
+  pointer-events: none;
+}
+.nav-panel__item--group:first-child .nav-panel__group-head {
+  border-top: none;
+  margin-top: 0;
+}
+.nav-panel__sub { list-style: none; padding: 0; }
+.nav-panel__link--sub {
+  padding-left: .875rem !important;
+  font-size: .84rem !important;
+}
+
+/* ── Theme 3 Bold: grouped dropdown (section groups within panel) ── */
+.dropdown-menu--grouped { min-width: 220px; }
+.dropdown-menu__item--group { padding: 0; border-bottom: none; }
+.dropdown-menu__group-head {
+  display: block;
+  padding: .5rem 1rem .25rem;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--nav-dropdown-link-hover-indicator, var(--nav-primary-link-active-indicator, var(--c-accent)));
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  margin-bottom: .1rem;
+  pointer-events: none;
+  border-top: 1px solid rgba(0,0,0,.06);
+  margin-top: .2rem;
+}
+.dropdown-menu__item--group:first-child .dropdown-menu__group-head {
+  border-top: none;
+  margin-top: 0;
+}
+.dropdown-menu__group-list { list-style: none; padding: 0; }
+.dropdown-menu__link--sub {
+  padding-left: 1.5rem !important;
+  font-size: .84rem !important;
+  opacity: .9;
+}
+
+/* ── Make Theme 2 panels visible on hover in preview ────────── */
+#preview-content .primary-nav__item--has-panel:hover .nav-panel {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  transition-delay: 0s !important;
+}
+
+/* ── Desktop / Laptop nav preview — looks like a real site header ── */
+
+/* Outer wrapper: full-width bar with brand + nav */
+.pnav-wrapper {
+  display: flex; align-items: stretch;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--r-md);
+  box-shadow: 0 2px 8px rgba(28,35,51,.08);
+  overflow: visible;
+  width: 100%;
+  height: 58px;
+}
+#preview-frame[data-vp="laptop"] .pnav-wrapper { height: 50px; }
+
+.pnav-brand {
+  display: flex; align-items: center;
+  padding: 0 16px;
+  font-size: .9rem; font-weight: 700; color: #1C2333;
+  border-right: 1px solid #E2E8F0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Top-level <ul> */
+.preview-nav {
+  display: flex; align-items: stretch;
+  list-style: none;
+  padding: 0 4px;
+  overflow: visible;
+  flex: 1;
+}
+
+/* Every nav item */
+.preview-nav > li {
+  position: relative;
+  display: flex; align-items: stretch;
+}
+
+/* Top-level link labels */
+.preview-nav > li > .pnav-item {
+  display: flex; align-items: center;
+  padding: 0 16px;
+  font-size: 1rem; font-weight: 600; color: #374151;
+  white-space: nowrap; gap: 5px; cursor: default;
+  border-bottom: 3px solid transparent;
+  transition: color .12s, border-color .12s;
+}
+#preview-frame[data-vp="laptop"] .preview-nav > li > .pnav-item { padding: 0 12px; font-size: .9rem; }
+
+.preview-nav > li:hover > .pnav-item {
+  color: var(--c-accent);
+  border-bottom-color: var(--c-accent);
+}
+
+/* ── Dropdowns ─────────────────────────────────────────── */
+
+/* All sub-menus */
+.pnav-sub {
+  display: none;
+  position: absolute;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(28,35,51,.13), 0 2px 6px rgba(28,35,51,.07);
+  padding: 5px 0;
+  min-width: 180px;
+  z-index: 200;
+}
+
+/* Level-1 dropdown: opens below top nav item */
+.preview-nav > li > .pnav-sub {
+  top: calc(100% + 2px);
+  left: 0;
+}
+
+/* Level-2+ dropdowns: fly out to the right */
+.pnav-sub .pnav-sub {
+  top: -6px;
+  left: 100%;
+}
+
+/* Every li inside a dropdown needs position:relative so its own sub can anchor to it */
+.pnav-sub li {
+  position: relative;
+}
+
+/* Dropdown link labels */
+.pnav-sub .pnav-item {
+  display: flex; align-items: center;
+  padding: 10px 18px;
+  font-size: .95rem; font-weight: 400; color: #374151;
+  white-space: nowrap; gap: 5px; cursor: default;
+  transition: background .1s, color .1s;
+}
+
+.pnav-sub li:hover > .pnav-item {
+  background: #EBF4FF; color: var(--c-accent);
+}
+
+/* Show on hover / focus */
+.preview-nav > li:hover > .pnav-sub,
+.preview-nav > li:focus-within > .pnav-sub,
+.pnav-sub li:hover > .pnav-sub,
+.pnav-sub li:focus-within > .pnav-sub { display: block; }
+
+/* Chevron icons */
+.pnav-chevron { font-size: .8em; color: var(--c-text-muted); }
+
+/* ── Utility nav (desktop/laptop) — right-aligned secondary links ── */
+.preview-utility-nav {
+  display: flex; align-items: stretch;
+  list-style: none; padding: 0 4px;
+  margin-left: auto;
+  border-left: 1px solid #E2E8F0;
+  overflow: visible;
+}
+.preview-utility-nav > li {
+  position: relative; display: flex; align-items: stretch;
+}
+.preview-utility-nav > li > .pnav-item {
+  display: flex; align-items: center; padding: 0 12px;
+  font-size: .95rem; font-weight: 500; color: #4F5E7B;
+  white-space: nowrap; gap: 4px; cursor: default;
+  border-bottom: 3px solid transparent;
+  transition: color .12s, border-color .12s;
+}
+.preview-utility-nav > li:hover > .pnav-item {
+  color: var(--c-accent); border-bottom-color: var(--c-accent);
+}
+/* Utility dropdowns use same pnav-sub styles */
+.preview-utility-nav > li > .pnav-sub {
+  top: calc(100% + 2px); right: 0; left: auto;
+}
+
+/* ── Mobile utility divider ──────────────────────────────── */
+.pmob-utility-divider {
+  height: 1px; background: #E2E8F0; margin: 4px 12px;
+}
+.pmob-utility-nav .pmob-item {
+  font-size: .8rem; color: #4F5E7B;
+}
+
+/* ── Mobile nav preview ─────────────────────────────────── */
+
+#preview-frame[data-vp="mobile"] { align-items: flex-start; }
+#preview-frame[data-vp="mobile"] #preview-content { display: flex; align-items: flex-start; }
+
+.preview-mobile-chrome {
+  display: flex; flex-direction: column;
+  border: 1px solid #D1D9E6; border-radius: var(--r-lg);
+  overflow: hidden; width: 220px; min-width: 220px;
+  box-shadow: 0 4px 16px rgba(28,35,51,.10);
+  background: #fff;
+}
+.preview-mobile-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  background: #fff; border-bottom: 1px solid #E8EDF4;
+}
+.pmob-brand { font-size: .85rem; font-weight: 700; color: #1C2333; }
+.preview-hamburger {
+  font-size: 1.1rem; color: #4B5563; cursor: default;
+  background: none; border: none; padding: 2px;
+}
+.preview-mobile-panel { background: #FAFBFD; padding: 8px 0; }
+
+.pmob-nav { list-style: none; }
+.pmob-nav li { list-style: none; }
+
+.pmob-item {
+  display: block;
+  padding: 9px 16px;
+  font-size: .84rem; font-weight: 500; color: #374151;
+  cursor: default;
+}
+.pmob-item--child {
+  font-weight: 400; color: #4F5E7B;
+  border-left: 2px solid #E2E8F0;
+}
+.pmob-indent-marker { color: #8896A8; }
+.pmob-sub { list-style: none; }
+.pmob-nav li:hover > .pmob-item { background: #EBF4FF; color: var(--c-accent); }
+
+/* ── Workspace ──────────────────────────────────────────────── */
+#workspace {
+  grid-area: workspace;
+  display: grid;
+  grid-template-columns: var(--eb-width) 1fr;
+  grid-template-areas: "eb am";
+  overflow: hidden;
+  transition: grid-template-columns var(--t-slow);
+}
+#workspace.eb-collapsed {
+  grid-template-columns: 40px 1fr;
+}
+
+/* ── Element Box ────────────────────────────────────────────── */
+#element-box {
+  grid-area: eb;
+  display: flex; flex-direction: column;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  overflow: hidden;
+  transition: opacity var(--t-slow);
+  min-width: 0;
+}
+.eb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+.panel-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-muted); }
+
+.eb-add { padding: 10px 12px; border-bottom: 1px solid var(--c-border); flex-shrink: 0; }
+#eb-input {
+  width: 100%; resize: none;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 7px 9px;
+  font-size: .83rem; color: var(--c-text);
+  background: var(--c-bg);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  line-height: 1.5;
+}
+#eb-input:focus {
+  outline: none; border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(59,125,216,.15);
+}
+#eb-add-btn { margin-top: 7px; }
+
+#eb-cards {
+  flex: 1; overflow-y: auto; padding: 8px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+#eb-cards:empty::after {
+  content: 'No elements yet. Type above to add some.';
+  font-size: .8rem; color: var(--c-text-muted); font-style: italic;
+  text-align: center; padding: 16px 8px;
+}
+
+.kb-hint {
+  padding: 6px 12px; font-size: .72rem; color: var(--c-text-muted);
+  border-top: 1px solid var(--c-border); flex-shrink: 0; text-align: center;
+}
+
+/* ── Collapsed EB rail ──────────────────────────────────────── */
+#eb-rail {
+  grid-area: eb;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 0; gap: 8px;
+  border-right: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+/* display is controlled by the [hidden] attribute — see reset above */
+.eb-rail-count {
+  font-size: .7rem; font-weight: 700; color: var(--c-text-muted);
+  writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .05em;
+}
+
+/* ── Element Card (in EB) ───────────────────────────────────── */
+.eb-card {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+  position: relative;
+}
+.eb-card.card-entering {
+  animation: card-enter var(--t-normal) ease-out both;
+}
+.eb-card:hover {
+  border-color: var(--c-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.eb-card:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(59,125,216,.12); }
+.eb-card.dragging { opacity: .4; }
+.eb-card.card-exiting { animation: card-exit var(--t-normal) ease-in both; }
+.eb-card[draggable="true"]:active { cursor: grabbing; }
+
+.card-row {
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.drag-handle {
+  color: var(--c-border-strong); font-size: 1.2rem; line-height: 1.4;
+  cursor: grab; flex-shrink: 0;
+  transition: color var(--t-fast);
+  letter-spacing: -1px;
+}
+/* EB: show on hover; AM: always show */
+.eb-card:hover .drag-handle { color: var(--c-text-muted); }
+.am-card .drag-handle { color: var(--c-border-strong); opacity: 1; }
+.am-card:hover .drag-handle { color: var(--c-text-muted); }
+
+.card-body { flex: 1; min-width: 0; }
+.card-title-text {
+  font-size: 1rem; font-weight: 600; color: var(--c-text);
+  cursor: text; display: block;
+  word-break: break-word; overflow-wrap: break-word;
+}
+.card-title-text:empty::before { content: 'Untitled'; color: var(--c-text-muted); }
+.card-title-input {
+  display: none; width: 100%; border: none; background: none;
+  font-size: 1rem; font-weight: 600; color: var(--c-text);
+  padding: 0; outline: none;
+}
+.card-title-input.active { display: block; }
+.card-title-text.hidden { display: none; }
+
+.card-desc-text {
+  font-size: .85rem; color: var(--c-text-muted); margin-top: 4px;
+  cursor: text; display: block; line-height: 1.4;
+}
+.card-desc-text.is-empty { display: none; }
+.add-desc-btn {
+  font-size: .73rem; color: var(--c-text-muted);
+  background: none; border: none; padding: 2px 0; margin-top: 2px;
+  cursor: pointer; opacity: 0; transition: opacity var(--t-fast);
+  text-align: left; line-height: 1.4; display: block;
+}
+.eb-card:hover .add-desc-btn,
+.eb-card:focus-within .add-desc-btn,
+.am-card:hover .add-desc-btn,
+.am-card:focus-within .add-desc-btn { opacity: 1; }
+.add-desc-btn.is-hidden { display: none; }
+.card-desc-input {
+  display: none; width: 100%; border: none; background: none;
+  font-size: .85rem; color: var(--c-text-muted); padding: 0; resize: none;
+  outline: none; line-height: 1.4; overflow: hidden;
+}
+.card-desc-input.active { display: block; }
+.card-desc-text.hidden { display: none; }
+
+.card-delete-btn {
+  flex-shrink: 0; width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-size: 1.1rem; color: transparent;
+  transition: background var(--t-fast), color var(--t-fast);
+  align-self: flex-start;
+}
+.eb-card:hover .card-delete-btn,
+.eb-card:focus-within .card-delete-btn { color: var(--c-text-muted); }
+.card-delete-btn:hover { background: var(--c-danger-light); color: var(--c-danger) !important; }
+.card-delete-btn:focus-visible { outline: 2px solid var(--c-danger); outline-offset: 2px; color: var(--c-danger) !important; }
+
+/* ── EB card reorder drop indicator (Feature 6) ─────────────── */
+.eb-card.eb-drop-before {
+  border-top: 2px solid var(--c-accent);
+  margin-top: 4px;
+}
+
+/* ── Architecture Map ───────────────────────────────────────── */
+#architecture-map {
+  grid-area: am;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: var(--c-bg);
+}
+.am-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.am-hint { font-size: .75rem; color: var(--c-text-muted); flex-basis: 100%; order: 10; margin-top: 2px; }
+.am-bulk-actions { display: flex; gap: 4px; margin-left: auto; }
+
+/* Site name field embedded in the AM header */
+.am-sitename {
+  display: flex; align-items: center; gap: 6px;
+  margin-left: 8px;
+}
+.am-sitename__label {
+  font-size: .72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--c-text-muted);
+  white-space: nowrap;
+}
+.am-sitename .preview-sitename__input {
+  height: 26px;
+  padding: 0 8px;
+  font-size: .8rem;
+  border-radius: var(--r-sm);
+  width: 120px;
+}
+
+#am-canvas {
+  flex: 1; overflow: auto; padding: 16px;
+  position: relative;
+  outline: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;      /* stack utility below main nav on narrow screens */
+  align-items: flex-start;
+  gap: 20px;
+}
+/* Two-column layout: main IA tree | utility menu */
+.am-col { flex: 1; min-width: 0; }
+.am-col--main {
+  flex: 3 1 260px;      /* takes ~60% on wide, wraps utility out at ~480px */
+}
+.am-col--utility {
+  flex: 2 1 220px;      /* takes ~40% on wide, capped */
+  max-width: 360px;
+  margin-left: 0;       /* gap on #am-canvas handles spacing */
+  padding-left: 20px;
+  border-left: 2px dashed var(--c-border);
+}
+/* When in side-by-side layout, remove the top border/margin from the utility zone */
+.am-col--utility .am-zone-utility {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+.am-col--utility .am-add-zone-btn {
+  margin-top: 0;
+}
+#am-tree {
+  display: inline-block;
+  min-width: 100%;
+}
+#am-canvas:focus-visible { box-shadow: inset 0 0 0 2px var(--c-accent); outline: none; }
+
+#am-tree { display: flex; flex-direction: column; gap: 0; }
+
+.am-status {
+  padding: 4px 16px 6px;
+  font-size: .75rem; color: var(--c-accent);
+  min-height: 22px; flex-shrink: 0;
+  font-style: italic;
+}
+
+/* ── Drop zones (empty-state root target) ───────────────────── */
+.drop-zone--root {
+  min-height: 60px; border-radius: var(--r-md);
+  border: 2px dashed var(--c-border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.drop-zone--root:empty::before {
+  content: 'Drag cards here to start your IA';
+  font-size: .82rem; color: var(--c-text-muted); font-style: italic;
+}
+.drop-zone--root .drop-zone__label { font-size: .82rem; color: var(--c-text-muted); }
+.drop-zone--root.drag-over,
+.drop-zone--root.kb-highlight {
+  background: var(--c-accent-light); border-color: var(--c-accent);
+  border-style: solid;
+}
+
+/* ── Proximity drop line ────────────────────────────────────── */
+
+/* The single line that appears between / around cards during drag */
+.am-drop-line {
+  position: absolute;
+  height: 2px;
+  background: var(--c-accent);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 30;
+  /* Dot at the left end to make the line more visible */
+}
+.am-drop-line::before {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--c-accent);
+  border-radius: 50%;
+  top: -3px; left: -4px;
+}
+
+/* Card highlighted as a nest target */
+.am-card.drop-nest-target {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  background: var(--c-accent-light) !important;
+}
+
+/* ── AM Tree nodes ──────────────────────────────────────────── */
+.tree-node {
+  position: relative;
+}
+.tree-node.card-exiting { animation: card-exit var(--t-normal) ease-in both; }
+
+.tree-children {
+  margin-left: 24px;
+  padding-left: 16px;
+  border-left: 2px solid var(--c-border);
+  transition: border-color var(--t-fast);
+}
+.tree-node:hover > .tree-children { border-color: var(--c-border-strong); }
+
+/* AM page card */
+.am-card {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  margin: 6px 0;
+  cursor: grab;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+  position: relative;
+  overflow: visible; /* allow focus outlines and drop-nest outline to render outside bounds */
+  /* Responsive width: grows with content, bounded by min/max */
+  width: fit-content;
+  min-width: 200px;
+  max-width: 360px;
+}
+.am-card:hover { border-color: var(--c-border-strong); box-shadow: var(--shadow-md); }
+.am-card:focus-within { box-shadow: 0 0 0 3px rgba(59,125,216,.15); }
+.am-card.dragging { opacity: .35; }
+.am-card.kb-selected {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(59,125,216,.25);
+  background: var(--c-accent-light);
+}
+.am-card.kb-moving {
+  border-color: var(--c-amber);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.25);
+  background: var(--c-amber-light);
+}
+.am-card[draggable="true"]:active { cursor: grabbing; }
+
+/* Nested element card (inside a page) */
+.am-card.is-nested {
+  background: var(--c-nested-bg);
+  border-color: #BFD9F8;
+  padding: 10px 14px;
+  /* Fill parent card's content width; don't overflow */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.am-card-header { display: flex; align-items: flex-start; gap: 6px; }
+.tree-toggle {
+  flex-shrink: 0; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; color: var(--c-text); border-radius: 4px;
+  transition: background var(--t-fast), transform var(--t-fast);
+  margin-top: 1px;
+}
+.tree-toggle:hover { background: var(--c-bg); color: var(--c-text); }
+.tree-toggle:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+.tree-toggle.collapsed { transform: rotate(-90deg); }
+.tree-toggle--hidden { visibility: hidden; pointer-events: none; }
+
+.am-card-actions {
+  margin-left: auto; display: flex; gap: 4px; flex-shrink: 0; align-items: flex-start;
+}
+.am-action-btn {
+  width: 26px; height: 26px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; color: transparent;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.am-card:hover .am-action-btn,
+.am-card:focus-within .am-action-btn { color: var(--c-text-muted); }
+.am-action-btn:hover { background: var(--c-bg); color: var(--c-text) !important; }
+.am-action-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; color: var(--c-text-muted) !important; }
+.am-action-btn--danger:hover { background: var(--c-danger-light); color: var(--c-danger) !important; }
+
+/* Collapsed badge */
+.collapsed-badge {
+  display: none; font-size: .7rem; color: var(--c-text-muted);
+  padding: 1px 7px; background: var(--c-bg); border: 1px solid var(--c-border);
+  border-radius: 10px; margin-top: 4px; width: fit-content;
+}
+.tree-node.is-collapsed > .am-card .collapsed-badge { display: inline-block; }
+.tree-node.is-collapsed > .tree-children { display: none; }
+
+/* Nested cards area */
+.nested-cards {
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px solid var(--c-border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+/* ── Dialogs ────────────────────────────────────────────────── */
+.dialog-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--c-border);
+}
+.dialog-header h2 { font-size: 1rem; font-weight: 600; }
+.dialog-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--c-text-muted);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.dialog-close:hover { background: var(--c-bg); color: var(--c-text); }
+.dialog-close:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.dialog-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 14px 20px;
+}
+
+#confirm-dialog { max-width: 380px; }
+#confirm-dialog p { padding: 14px 20px 0; font-size: .88rem; color: var(--c-text-muted); }
+
+/* Shortcuts dialog */
+#shortcuts-dialog { max-width: 560px; width: 95vw; }
+.shortcuts-body {
+  padding: 0;
+  max-height: 72vh;
+  overflow-y: auto;
+}
+.shortcut-section {
+  padding: 16px 24px 12px;
+}
+.shortcut-section + .shortcut-section {
+  border-top: 1px solid var(--c-border);
+}
+.shortcut-section-title {
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--c-text-muted);
+  margin-bottom: 10px;
+}
+.shortcut-list {
+  display: flex; flex-direction: column; gap: 0;
+}
+.shortcut-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 6px 0;
+}
+.shortcut-row + .shortcut-row {
+  border-top: 1px solid var(--c-bg);
+}
+.shortcut-row dt {
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center;
+  font-size: .85rem;
+}
+.shortcut-row dd {
+  font-size: .88rem; color: var(--c-text-muted); line-height: 1.4;
+}
+.shortcut-context {
+  font-size: .75rem; color: var(--c-text-muted); font-style: italic;
+  white-space: nowrap;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(-8px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+@keyframes card-exit {
+  from { opacity: 1; transform: scale(1);    max-height: 120px; }
+  to   { opacity: 0; transform: scale(.85);  max-height: 0; padding: 0; margin: 0; }
+}
+@keyframes drop-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59,125,216,.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(59,125,216,0); }
+}
+@keyframes bounce-in {
+  0%   { transform: scale(.9); }
+  60%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+@keyframes pulse-moving {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(245,158,11,.25); }
+  50%       { box-shadow: 0 0 0 6px rgba(245,158,11,.10); }
+}
+
+.tree-node.just-dropped > .am-card { animation: bounce-in var(--t-normal) ease-out both; }
+.drop-zone--root.drag-over { background: var(--c-accent-light); border-color: var(--c-accent); border-style: solid; }
+
+/* ── Utility Menu zone (Feature 8) ─────────────────────────── */
+.am-zone-utility {
+  margin-top: 16px;
+  border-top: 2px dashed var(--c-border);
+  padding-top: 12px;
+}
+.am-zone-utility-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.am-zone-label {
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--c-text-muted);
+}
+.am-add-zone-btn {
+  margin-top: 12px;
+  border-style: dashed;
+  color: var(--c-text-muted);
+  font-size: .78rem;
+}
+.am-add-zone-btn:hover:not(:disabled) {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+/* Utility nav in desktop preview */
+.preview-utility-nav {
+  display: flex; align-items: stretch;
+  list-style: none;
+  padding: 0 4px;
+  overflow: visible;
+  margin-left: auto;
+  border-left: 1px solid #E2E8F0;
+}
+
+/* Utility nav in mobile preview */
+.pmob-utility-divider {
+  height: 1px; background: #E2E8F0; margin: 4px 0;
+}
+.pmob-utility-nav {
+  opacity: .85;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ── Focus styles ───────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.eb-card:focus { outline: none; }
+.am-card:focus { outline: none; }
+
+/* ── Scrollbars (subtle) ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-text-muted); }
+
+/* ── Drag-over / kb-move body class (show all drop zones) ───── */
+body.is-dragging #am-canvas,
+body.is-kb-moving #am-canvas { background: #EEF4FF; }
+body.is-dragging .drop-zone--root { display: flex !important; }
+
+/* ── EB collapsed state ─────────────────────────────────────── */
+#workspace.eb-collapsed #element-box { opacity: 0; pointer-events: none; overflow: hidden; }

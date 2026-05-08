@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAM — Information Architecture Mapper</title>
+  <link rel="stylesheet" href="css/style.css?v=12" />
+  <!-- Active nav theme CSS — href is swapped by preview.js; no href = no request -->
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header id="app-header" role="banner">
+      <div class="header-brand">
+        <span class="app-name" aria-label="IAM">IAM</span>
+        <span class="app-tagline" aria-hidden="true">Information Architecture Mapper</span>
+      </div>
+      <div class="header-actions">
+        <button id="undo-btn" class="btn btn--icon" aria-label="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)" disabled>
+          <span aria-hidden="true">↩</span> Undo
+        </button>
+        <button id="redo-btn" class="btn btn--icon" aria-label="Redo (Ctrl+Y)" title="Redo (Ctrl+Y)" disabled>
+          <span aria-hidden="true">↪</span> Redo
+        </button>
+        <button id="import-btn" class="btn btn--ghost" aria-label="Import from .md or .json file">
+          <span aria-hidden="true">⬆</span> Import
+        </button>
+        <button id="export-btn" class="btn btn--primary" aria-label="Export as Markdown file">
+          <span aria-hidden="true">⬇</span> Export .md
+        </button>
+        <button id="shortcuts-btn" class="btn btn--ghost" aria-label="Show keyboard shortcuts" aria-expanded="false" aria-controls="shortcuts-dialog">
+          <span aria-hidden="true">⌨</span> Shortcuts
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Menu Preview ─────────────────────────────────────── -->
+    <section id="preview-section" aria-label="Live menu preview">
+      <div class="preview-bar">
+
+        <!-- Row 1: title + site name + option toggles + viewport -->
+        <div class="preview-bar__row">
+          <h2 class="preview-title">Menu Preview</h2>
+          <div class="preview-bar__right">
+            <div class="preview-opts" role="group" aria-label="Preview display options">
+              <button class="preview-opt-btn active" id="opt-utility-bar"
+                aria-pressed="true" title="Show or hide the utility navigation in the preview">
+                Utility bar
+              </button>
+            </div>
+            <div class="viewport-toggle" role="group" aria-label="Preview viewport size">
+              <button class="vp-btn active" data-vp="desktop" aria-pressed="true">Desktop</button>
+              <button class="vp-btn" data-vp="laptop" aria-pressed="false">Laptop</button>
+              <button class="vp-btn" data-vp="mobile" aria-pressed="false">Mobile</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: theme style picker -->
+        <div class="preview-bar__row">
+          <div class="theme-switcher" role="group" aria-label="Navigation theme style">
+            <span class="preview-control-label" aria-hidden="true">Style</span>
+            <button class="theme-btn active" data-theme="default" aria-pressed="true">Single row</button>
+            <button class="theme-btn" data-theme="1" aria-pressed="false">Two row</button>
+            <button class="theme-btn" data-theme="2" aria-pressed="false">Mega</button>
+            <button class="theme-btn" data-theme="4" aria-pressed="false">Compact</button>
+          </div>
+        </div>
+
+      </div>
+      <div id="preview-frame" data-vp="desktop" role="region" aria-label="Navigation structure preview">
+        <div id="preview-content">
+          <p class="preview-empty">Add pages to the Architecture Map to see your navigation here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Main workspace ───────────────────────────────────── -->
+    <div id="workspace">
+
+      <!-- Element Box sidebar -->
+      <aside id="element-box" aria-label="Element Box">
+        <div class="eb-header">
+          <h2 class="panel-title">Element Box</h2>
+          <button id="eb-collapse-btn" class="btn btn--ghost btn--sm"
+            aria-label="Collapse Element Box" title="Collapse (C)">◀</button>
+        </div>
+
+        <div class="eb-add">
+          <label for="eb-input" class="sr-only">Add elements — type names, one per line, then press Shift+Enter or click Add</label>
+          <textarea
+            id="eb-input"
+            rows="3"
+            placeholder="Type element names&#10;one per line…"
+            aria-describedby="eb-input-hint"
+          ></textarea>
+          <p id="eb-input-hint" class="hint-text">Shift+Enter or click Add to create cards</p>
+          <button id="eb-add-btn" class="btn btn--primary btn--sm btn--full">+ Add</button>
+        </div>
+
+        <div id="eb-cards"
+          role="list"
+          aria-label="Element Box cards — drag to Architecture Map or press M to move"
+        >
+          <!-- populated by eb.js -->
+        </div>
+
+        <p class="kb-hint"><kbd>M</kbd> move · <kbd>E</kbd> edit · <kbd>Del</kbd> delete</p>
+      </aside>
+
+      <!-- Collapsed EB rail -->
+      <div id="eb-rail" hidden aria-hidden="true">
+        <button id="eb-expand-btn" class="btn btn--ghost"
+          aria-label="Expand Element Box" title="Expand Element Box">▶</button>
+        <div class="eb-rail-count" id="eb-rail-count" aria-hidden="true"></div>
+      </div>
+
+      <!-- Architecture Map -->
+      <main id="architecture-map" aria-label="Architecture Map">
+        <div class="am-header">
+          <h2 class="panel-title">Architecture Map</h2>
+          <div class="am-sitename">
+            <label for="preview-site-name-input" class="am-sitename__label">Site name</label>
+            <input id="preview-site-name-input" type="text" class="preview-sitename__input"
+                   placeholder="Site name…" value="Site" maxlength="60" autocomplete="off" />
+          </div>
+          <p class="am-hint">Drag cards from the Element Box to build your IA</p>
+          <div class="am-bulk-actions">
+            <button id="am-clear-btn" class="btn btn--ghost btn--sm" title="Move all AM cards to Element Box">⬅ Clear AM</button>
+            <button id="eb-clear-btn" class="btn btn--ghost btn--sm" title="Delete all Element Box cards">🗑 Clear EB</button>
+            <button id="am-delete-btn" class="btn btn--ghost btn--sm btn--danger-ghost" title="Delete all AM cards permanently">🗑 Delete All AM</button>
+          </div>
+        </div>
+
+        <div id="am-canvas"
+          role="tree"
+          tabindex="0"
+          aria-label="Architecture Map tree — drag cards here or use M key to place them"
+        >
+          <div class="am-col am-col--main">
+            <div id="am-root-drop" class="drop-zone drop-zone--root"
+              data-target-id="" data-position="root"
+              aria-label="Drop here to add as a top-level page">
+              <span class="drop-zone__label">Drop here to add a root page</span>
+            </div>
+            <div id="am-tree">
+              <!-- populated by am.js -->
+            </div>
+          </div>
+          <div class="am-col am-col--utility">
+            <div id="am-zone-utility" class="am-zone-utility" hidden aria-hidden="true">
+              <div class="am-zone-utility-header">
+                <span class="am-zone-label">Utility Menu</span>
+                <button id="utility-remove-btn" class="btn btn--ghost btn--sm" title="Remove utility menu">Remove</button>
+              </div>
+              <div id="am-utility-root-drop" class="drop-zone drop-zone--root" data-zone="utility" aria-label="Drop here to add utility items">
+                <span class="drop-zone__label">Drop here to add utility items</span>
+              </div>
+              <div id="am-utility-tree"></div>
+            </div>
+            <button id="add-utility-btn" class="am-add-zone-btn btn btn--ghost btn--sm">+ Add Utility Menu</button>
+          </div>
+        </div>
+
+        <div id="am-status" class="am-status" role="status" aria-live="polite" aria-atomic="true"></div>
+      </main>
+    </div><!-- /workspace -->
+
+  </div><!-- /app -->
+
+  <!-- ── Keyboard Shortcuts Dialog ─────────────────────────── -->
+  <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+    <div class="dialog-header">
+      <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
+      <button class="dialog-close" aria-label="Close shortcuts dialog">×</button>
+    </div>
+    <div class="shortcuts-body">
+
+      <div class="shortcut-section">
+        <h3 class="shortcut-section-title">Navigating the Architecture Map</h3>
+        <dl class="shortcut-list">
+          <div class="shortcut-row">
+            <dt><kbd>Tab</kbd></dt>
+            <dd>Jump to the Architecture Map (then use arrow keys)</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>↑</kbd> / <kbd>↓</kbd></dt>
+            <dd>Move between cards</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>→</kbd></dt>
+            <dd>Expand subtree, or move into first child</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>←</kbd></dt>
+            <dd>Collapse subtree, or move up to parent</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Home</kbd> / <kbd>End</kbd></dt>
+            <dd>Jump to first or last card</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="shortcut-section">
+        <h3 class="shortcut-section-title">Moving Cards</h3>
+        <dl class="shortcut-list">
+          <div class="shortcut-row">
+            <dt><kbd>M</kbd></dt>
+            <dd>Pick up the focused card to move it</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>↑</kbd> / <kbd>↓</kbd></dt>
+            <dd>Cycle through available drop positions</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Enter</kbd> / <kbd>Space</kbd></dt>
+            <dd>Confirm and drop the card</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Esc</kbd></dt>
+            <dd>Cancel move, return card to original position</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="shortcut-section">
+        <h3 class="shortcut-section-title">Card Actions</h3>
+        <dl class="shortcut-list">
+          <div class="shortcut-row">
+            <dt><kbd>E</kbd></dt>
+            <dd>Edit the title of the focused card</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>B</kbd></dt>
+            <dd>Return card to the Element Box</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Del</kbd></dt>
+            <dd>Delete card (children return to Element Box)</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Del</kbd> / <kbd>Backspace</kbd> <span class="shortcut-context">(in Element Box)</span></dt>
+            <dd>Delete focused Element Box card</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Shift+Enter</kbd> <span class="shortcut-context">(in Element Box input)</span></dt>
+            <dd>Add elements from the text area</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="shortcut-section">
+        <h3 class="shortcut-section-title">Global</h3>
+        <dl class="shortcut-list">
+          <div class="shortcut-row">
+            <dt><kbd>Ctrl</kbd>+<kbd>Z</kbd></dt>
+            <dd>Undo last action</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>Ctrl</kbd>+<kbd>Y</kbd></dt>
+            <dd>Redo</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>C</kbd></dt>
+            <dd>Collapse or expand the Element Box sidebar</dd>
+          </div>
+          <div class="shortcut-row">
+            <dt><kbd>?</kbd></dt>
+            <dd>Show or hide this shortcuts panel</dd>
+          </div>
+        </dl>
+      </div>
+
+    </div>
+  </dialog>
+
+  <!-- ── Import Confirmation Dialog ───────────────────────── -->
+  <dialog id="import-confirm-dialog" aria-labelledby="import-confirm-title">
+    <div class="dialog-header">
+      <h2 id="import-confirm-title">Replace current IA?</h2>
+    </div>
+    <p id="import-confirm-msg">The current IA has content. Importing will replace everything.</p>
+    <div class="dialog-actions">
+      <button id="import-confirm-cancel" class="btn btn--ghost">Cancel</button>
+      <button id="import-confirm-ok" class="btn btn--primary">Import anyway</button>
+    </div>
+  </dialog>
+
+  <!-- ── Delete Confirmation Dialog ────────────────────────── -->
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <div class="dialog-header">
+      <h2 id="confirm-title">Delete card?</h2>
+    </div>
+    <p id="confirm-msg">Any children will be returned to the Element Box.</p>
+    <div class="dialog-actions">
+      <button id="confirm-cancel" class="btn">Cancel</button>
+      <button id="confirm-ok" class="btn btn--danger">Delete</button>
+    </div>
+  </dialog>
+
+  <!-- Hidden file input for import (triggered by Import button) -->
+  <input id="import-file-input" type="file" accept=".md,.json"
+         class="sr-only" aria-hidden="true" tabindex="-1" />
+
+  <!-- ── Screen reader announcements ───────────────────────── -->
+  <div id="sr-announce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/state.js?v=12"></script>
+  <script src="js/eb.js?v=12"></script>
+  <script src="js/am.js?v=12"></script>
+  <script src="js/preview.js?v=13"></script>
+  <script src="js/export.js?v=12"></script>
+  <script src="js/import.js?v=12"></script>
+  <script src="js/app.js?v=12"></script>
+</body>
+</html>
