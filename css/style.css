@@ -186,6 +186,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 }
 .theme-btn {
   padding: 2px 8px; font-size: .74rem; font-weight: 500;
+  min-height: 44px;
   border-radius: 4px; border: 1px solid var(--c-border);
   background: var(--c-surface); color: var(--c-text-muted);
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
@@ -200,6 +201,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .preview-opts { display: flex; align-items: center; gap: 3px; }
 .preview-opt-btn {
   padding: 2px 8px; font-size: .74rem; font-weight: 500;
+  min-height: 44px;
   border-radius: 4px; border: 1px dashed var(--c-border);
   background: var(--c-surface); color: var(--c-text-muted);
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
@@ -216,6 +218,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .viewport-toggle { display: flex; gap: 2px; }
 .vp-btn {
   padding: 2px 9px; font-size: .74rem; font-weight: 500;
+  min-height: 44px;
   border-radius: 4px; border: 1px solid var(--c-border);
   background: var(--c-surface); color: var(--c-text-muted);
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
@@ -936,20 +939,11 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .card-desc-text.hidden { display: none; }
 
 .card-delete-btn {
-  flex-shrink: 0; width: 26px; height: 26px;
+  flex-shrink: 0; min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%; font-size: 1.1rem; color: transparent;
   transition: background var(--t-fast), color var(--t-fast);
   align-self: flex-start;
-  position: relative;
-}
-.card-delete-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 44px;
-  min-height: 44px;
 }
 .eb-card:hover .card-delete-btn,
 .eb-card:focus-within .card-delete-btn { color: var(--c-text-muted); }
@@ -1151,11 +1145,10 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 
 .am-card-header { display: flex; align-items: flex-start; gap: 6px; }
 .tree-toggle {
-  flex-shrink: 0; width: 24px; height: 24px;
+  flex-shrink: 0; min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
   font-size: .9rem; color: var(--c-text); border-radius: 4px;
   transition: background var(--t-fast), transform var(--t-fast);
-  margin-top: 1px;
 }
 .tree-toggle:hover { background: var(--c-bg); color: var(--c-text); }
 .tree-toggle:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; }
@@ -1166,19 +1159,10 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   margin-left: auto; display: flex; gap: 4px; flex-shrink: 0; align-items: flex-start;
 }
 .am-action-btn {
-  width: 26px; height: 26px; border-radius: 5px;
+  min-width: 44px; min-height: 44px; border-radius: 5px;
   display: flex; align-items: center; justify-content: center;
   font-size: .9rem; color: transparent;
   transition: background var(--t-fast), color var(--t-fast);
-  position: relative;
-}
-.am-action-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 44px;
-  min-height: 44px;
 }
 .am-card:hover .am-action-btn,
 .am-card:focus-within .am-action-btn { color: var(--c-text-muted); }
