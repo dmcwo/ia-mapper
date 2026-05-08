@@ -13,7 +13,7 @@
     <!-- ── Header ──────────────────────────────────────────── -->
     <header id="app-header" role="banner">
       <div class="header-brand">
-        <span class="app-name" aria-label="IAM">IAM</span>
+        <h1 class="app-name">IAM</h1>
         <span class="app-tagline" aria-hidden="true">Information Architecture Mapper</span>
       </div>
       <div class="header-actions">
@@ -26,7 +26,7 @@
         <button id="import-btn" class="btn btn--ghost" aria-label="Import from .md or .json file">
           <span aria-hidden="true">⬆</span> Import
         </button>
-        <button id="export-btn" class="btn btn--primary" aria-label="Export as Markdown file">
+        <button id="export-btn" class="btn btn--primary" aria-label="Export .md as Markdown file">
           <span aria-hidden="true">⬇</span> Export .md
         </button>
         <button id="shortcuts-btn" class="btn btn--ghost" aria-label="Show keyboard shortcuts" aria-expanded="false" aria-controls="shortcuts-dialog">
@@ -134,9 +134,7 @@
         </div>
 
         <div id="am-canvas"
-          role="tree"
           tabindex="0"
-          aria-label="Architecture Map tree — drag cards here or use M key to place them"
         >
           <div class="am-col am-col--main">
             <div id="am-root-drop" class="drop-zone drop-zone--root"
@@ -144,7 +142,10 @@
               aria-label="Drop here to add as a top-level page">
               <span class="drop-zone__label">Drop here to add a root page</span>
             </div>
-            <div id="am-tree">
+            <div id="am-tree"
+              role="tree"
+              aria-label="Architecture Map tree — drag cards here or use M key to place them"
+            >
               <!-- populated by am.js -->
             </div>
           </div>

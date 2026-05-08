@@ -27,6 +27,11 @@
     var focusedId = document.activeElement && document.activeElement.dataset.cardId;
 
     container.innerHTML = '';
+    if (state.ebIds.length === 0) {
+      container.removeAttribute('role');
+    } else {
+      container.setAttribute('role', 'list');
+    }
     state.ebIds.forEach(function (id) {
       var card = State.getCard(id);
       if (!card) return;
