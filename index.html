@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IAM — Information Architecture Mapper</title>
-  <link rel="stylesheet" href="css/style.css?v=13" />
+
+  <link rel="stylesheet" href="css/style.css?v=14" />
+
   <!-- Active nav theme CSS — href is swapped by preview.js; no href = no request -->
 </head>
 <body>
@@ -18,19 +20,19 @@
       </div>
       <div class="header-actions">
         <button id="undo-btn" class="btn btn--icon" aria-label="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)" disabled>
-          <span aria-hidden="true">↩</span> Undo
+          <i data-lucide="undo-2" aria-hidden="true"></i> Undo
         </button>
         <button id="redo-btn" class="btn btn--icon" aria-label="Redo (Ctrl+Y)" title="Redo (Ctrl+Y)" disabled>
-          <span aria-hidden="true">↪</span> Redo
+          <i data-lucide="redo-2" aria-hidden="true"></i> Redo
         </button>
         <button id="import-btn" class="btn btn--ghost" aria-label="Import from .md or .json file">
-          <span aria-hidden="true">⬆</span> Import
+          <i data-lucide="upload" aria-hidden="true"></i> Import
         </button>
         <button id="export-btn" class="btn btn--primary" aria-label="Export .md as Markdown file">
-          <span aria-hidden="true">⬇</span> Export .md
+          <i data-lucide="download" aria-hidden="true"></i> Export .md
         </button>
         <button id="shortcuts-btn" class="btn btn--ghost" aria-label="Show keyboard shortcuts" aria-expanded="false" aria-controls="shortcuts-dialog">
-          <span aria-hidden="true">⌨</span> Shortcuts
+          <i data-lucide="keyboard" aria-hidden="true"></i> Shortcuts
         </button>
       </div>
     </header>
@@ -84,7 +86,7 @@
         <div class="eb-header">
           <h2 class="panel-title">Element Box</h2>
           <button id="eb-collapse-btn" class="btn btn--ghost btn--sm"
-            aria-label="Collapse Element Box" title="Collapse (C)">◀</button>
+            aria-label="Collapse Element Box" title="Collapse (C)"><i data-lucide="panel-left-close" aria-hidden="true"></i></button>
         </div>
 
         <div class="eb-add">
@@ -112,7 +114,7 @@
       <!-- Collapsed EB rail -->
       <div id="eb-rail" hidden aria-hidden="true">
         <button id="eb-expand-btn" class="btn btn--ghost"
-          aria-label="Expand Element Box" title="Expand Element Box">▶</button>
+          aria-label="Expand Element Box" title="Expand Element Box"><i data-lucide="panel-left-open" aria-hidden="true"></i></button>
         <div class="eb-rail-count" id="eb-rail-count" aria-hidden="true"></div>
       </div>
 
@@ -127,9 +129,9 @@
           </div>
           <p class="am-hint">Drag cards from the Element Box to build your IA</p>
           <div class="am-bulk-actions">
-            <button id="am-clear-btn" class="btn btn--ghost btn--sm" title="Move all AM cards to Element Box">⬅ Clear AM</button>
-            <button id="eb-clear-btn" class="btn btn--ghost btn--sm" title="Delete all Element Box cards">🗑 Clear EB</button>
-            <button id="am-delete-btn" class="btn btn--ghost btn--sm btn--danger-ghost" title="Delete all AM cards permanently">🗑 Delete All AM</button>
+            <button id="am-clear-btn" class="btn btn--ghost btn--sm" title="Move all AM cards to Element Box"><i data-lucide="arrow-left" aria-hidden="true"></i> Clear AM</button>
+            <button id="eb-clear-btn" class="btn btn--ghost btn--sm" title="Delete all Element Box cards"><i data-lucide="trash-2" aria-hidden="true"></i> Clear EB</button>
+            <button id="am-delete-btn" class="btn btn--ghost btn--sm btn--danger-ghost" title="Delete all AM cards permanently"><i data-lucide="trash-2" aria-hidden="true"></i> Delete All AM</button>
           </div>
         </div>
 
@@ -308,12 +310,13 @@
   <!-- ── Screen reader announcements ───────────────────────── -->
   <div id="sr-announce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="js/state.js?v=12"></script>
-  <script src="js/eb.js?v=12"></script>
-  <script src="js/am.js?v=12"></script>
-  <script src="js/preview.js?v=13"></script>
-  <script src="js/export.js?v=12"></script>
-  <script src="js/import.js?v=12"></script>
-  <script src="js/app.js?v=12"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/state.js?v=13"></script>
+  <script src="js/eb.js?v=13"></script>
+  <script src="js/am.js?v=13"></script>
+  <script src="js/preview.js?v=14"></script>
+  <script src="js/export.js?v=13"></script>
+  <script src="js/import.js?v=13"></script>
+  <script src="js/app.js?v=13"></script>
 </body>
 </html>

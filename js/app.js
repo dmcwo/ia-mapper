@@ -11,6 +11,8 @@
     AM.render();
     Preview.render();
     updateUndoRedo();
+    // Replace any newly-rendered <i data-lucide="..."> elements with SVG icons
+    if (window.lucide) lucide.createIcons();
   }
 
   /* ── Undo / redo button state ────────────────────────────── */

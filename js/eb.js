@@ -65,7 +65,7 @@
     // Feature 5: add is-empty class when no description; add-desc-btn hidden when description present
     el.innerHTML =
       '<div class="card-row">' +
-        '<span class="drag-handle" aria-hidden="true" title="Drag to Architecture Map">⠿</span>' +
+        '<span class="drag-handle" aria-hidden="true" title="Drag to Architecture Map"><i data-lucide="grip-vertical"></i></span>' +
         '<div class="card-body">' +
           '<span class="card-title-text">' + esc(card.title) + '</span>' +
           '<input class="card-title-input" type="text" value="' + esc(card.title) + '" aria-label="Title">' +
@@ -73,7 +73,7 @@
           '<textarea class="card-desc-input" rows="2" aria-label="Description">' + esc(card.description) + '</textarea>' +
           '<button class="add-desc-btn' + (card.description ? ' is-hidden' : '') + '" type="button" aria-label="Add description">+ Add description</button>' +
         '</div>' +
-        '<button class="card-delete-btn" aria-label="Delete ' + esc(card.title) + '" title="Delete (Del)">×</button>' +
+        '<button class="card-delete-btn" aria-label="Delete ' + esc(card.title) + '" title="Delete (Del)"><i data-lucide="x"></i></button>' +
       '</div>';
 
     attachCardEvents(el, card.id);

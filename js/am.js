@@ -121,10 +121,10 @@
     // Feature 5: is-empty on desc text, add-desc-btn
     el.innerHTML =
       '<div class="am-card-header">' +
-        '<span class="drag-handle" aria-hidden="true" title="Drag to reposition">⠿</span>' +
+        '<span class="drag-handle" aria-hidden="true" title="Drag to reposition"><i data-lucide="grip-vertical"></i></span>' +
         '<button class="tree-toggle' + (!hasChildren ? ' tree-toggle--hidden' : '') + (collapsedNodes[card.id] ? ' collapsed' : '') +
           '" tabindex="-1" aria-label="' + (collapsedNodes[card.id] ? 'Expand' : 'Collapse') + ' ' + esc(card.title) + '" aria-expanded="' + (!collapsedNodes[card.id]) + '">' +
-          '▾' +
+          '<i data-lucide="chevron-down"></i>' +
         '</button>' +
         '<div class="card-body">' +
           '<span class="card-title-text">' + esc(card.title) + '</span>' +
@@ -134,9 +134,9 @@
           '<button class="add-desc-btn' + (card.description ? ' is-hidden' : '') + '" type="button" aria-label="Add description">+ Add description</button>' +
         '</div>' +
         '<div class="am-card-actions">' +
-          '<button class="am-action-btn" data-action="edit" tabindex="-1" aria-label="Edit ' + esc(card.title) + '" title="Edit (E)">✎</button>' +
-          '<button class="am-action-btn" data-action="toEB" tabindex="-1" aria-label="Return to Element Box" title="Return to Element Box (B)">⬅</button>' +
-          '<button class="am-action-btn am-action-btn--danger" data-action="delete" tabindex="-1" aria-label="Delete ' + esc(card.title) + '" title="Delete (Del)">×</button>' +
+          '<button class="am-action-btn" data-action="edit" tabindex="-1" aria-label="Edit ' + esc(card.title) + '" title="Edit (E)"><i data-lucide="pencil"></i></button>' +
+          '<button class="am-action-btn" data-action="toEB" tabindex="-1" aria-label="Return to Element Box" title="Return to Element Box (B)"><i data-lucide="corner-up-left"></i></button>' +
+          '<button class="am-action-btn am-action-btn--danger" data-action="delete" tabindex="-1" aria-label="Delete ' + esc(card.title) + '" title="Delete (Del)"><i data-lucide="x"></i></button>' +
         '</div>' +
       '</div>' +
       (collapsedNodes[card.id] && badgeCount > 0
@@ -156,7 +156,7 @@
         ' data-card-id="' + nc.id + '" data-node-id="' + nc.id + '"' +
         ' aria-label="' + esc(nc.title) + ' — nested element">' +
         '<div class="am-card-header">' +
-          '<span class="drag-handle" aria-hidden="true" title="Drag to reposition">⠿</span>' +
+          '<span class="drag-handle" aria-hidden="true" title="Drag to reposition"><i data-lucide="grip-vertical"></i></span>' +
           '<div class="card-body">' +
             '<span class="card-title-text">' + esc(nc.title) + '</span>' +
             '<input class="card-title-input" type="text" value="' + esc(nc.title) + '" aria-label="Title">' +
@@ -165,8 +165,8 @@
             '<button class="add-desc-btn' + (nc.description ? ' is-hidden' : '') + '" type="button" aria-label="Add description">+ Add description</button>' +
           '</div>' +
           '<div class="am-card-actions">' +
-            '<button class="am-action-btn" data-action="toEB" tabindex="-1" aria-label="Return to Element Box" title="Return to Element Box (B)">⬅</button>' +
-            '<button class="am-action-btn am-action-btn--danger" data-action="delete" tabindex="-1" aria-label="Delete ' + esc(nc.title) + '" title="Delete (Del)">×</button>' +
+            '<button class="am-action-btn" data-action="toEB" tabindex="-1" aria-label="Return to Element Box" title="Return to Element Box (B)"><i data-lucide="corner-up-left"></i></button>' +
+            '<button class="am-action-btn am-action-btn--danger" data-action="delete" tabindex="-1" aria-label="Delete ' + esc(nc.title) + '" title="Delete (Del)"><i data-lucide="x"></i></button>' +
           '</div>' +
         '</div>' +
         (nc.nestedIds.length > 0 ? buildNestedArea(nc) : '') +

@@ -10,12 +10,12 @@
   --c-border-strong: #B8C4D4;
   --c-text:          #1C2333;
   --c-text-muted:    #3B4D6A;
-  --c-accent:        #3B7DD8;
+  --c-accent:        #0050A0;
   --c-accent-light:  #EAF2FF;
-  --c-accent-dark:   #2860B0;
+  --c-accent-dark:   #003D7A;
   --c-amber:         #F59E0B;
   --c-amber-light:   #FFFBEB;
-  --c-danger:        #DC2626;
+  --c-danger:        #991B1B;
   --c-danger-light:  #FEF2F2;
   --c-green:         #16A34A;
   --c-nested-bg:     #F0F7FF;
@@ -102,10 +102,25 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .btn--danger { background: var(--c-danger); color: #fff; border-color: #B91C1C; }
 .btn--danger-ghost { border-color: var(--c-danger); color: var(--c-danger); }
 .btn--danger-ghost:hover:not(:disabled) { background: var(--c-danger-light); color: var(--c-danger); }
-.btn--danger:hover:not(:disabled) { background: #B91C1C; color: #fff; }
+.btn--danger:hover:not(:disabled) { background: #7F1D1D; color: #fff; }
 .btn--sm { padding: 4px 9px; font-size: .8rem; }
 .btn--full { width: 100%; justify-content: center; }
 .btn--icon span { font-size: 1em; }
+
+/* ── Lucide SVG icons ───────────────────────────────────────── */
+.lucide {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  stroke-width: 2;
+  vertical-align: middle;
+  pointer-events: none;
+}
+/* Slightly smaller in compact card action buttons */
+.am-action-btn .lucide,
+.card-delete-btn .lucide,
+.tree-toggle .lucide { width: 14px; height: 14px; }
+/* Drag handles use the same small size */
+.drag-handle .lucide { width: 14px; height: 14px; }
 
 /* ── App layout ─────────────────────────────────────────────── */
 #app {
@@ -173,7 +188,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .preview-sitename__input:focus {
   outline: none;
   border-color: var(--c-accent);
-  box-shadow: 0 0 0 2px rgba(59,125,216,.18);
+  box-shadow: 0 0 0 2px rgba(0,80,160,.18);
 }
 .preview-sitename__input::placeholder { color: var(--c-text-muted); }
 
@@ -828,7 +843,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 }
 #eb-input:focus {
   outline: none; border-color: var(--c-accent);
-  box-shadow: 0 0 0 3px rgba(59,125,216,.15);
+  box-shadow: 0 0 0 3px rgba(0,80,160,.15);
 }
 #eb-add-btn { margin-top: 7px; }
 
@@ -880,7 +895,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   border-color: var(--c-border-strong);
   box-shadow: var(--shadow-sm);
 }
-.eb-card:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(59,125,216,.12); }
+.eb-card:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(0,80,160,.12); }
 .eb-card.dragging { opacity: .4; }
 .eb-card.card-exiting { animation: card-exit var(--t-normal) ease-in both; }
 .eb-card[draggable="true"]:active { cursor: grabbing; }
@@ -889,10 +904,10 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   display: flex; align-items: flex-start; gap: 6px;
 }
 .drag-handle {
-  color: var(--c-border-strong); font-size: 1.2rem; line-height: 1.4;
+  color: var(--c-border-strong);
   cursor: grab; flex-shrink: 0;
+  display: flex; align-items: center;
   transition: color var(--t-fast);
-  letter-spacing: -1px;
 }
 /* EB: show on hover; AM: always show */
 .eb-card:hover .drag-handle { color: var(--c-text-muted); }
@@ -1117,11 +1132,11 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   max-width: 360px;
 }
 .am-card:hover { border-color: var(--c-border-strong); box-shadow: var(--shadow-md); }
-.am-card:focus-within { box-shadow: 0 0 0 3px rgba(59,125,216,.15); }
+.am-card:focus-within { box-shadow: 0 0 0 3px rgba(0,80,160,.15); }
 .am-card.dragging { opacity: .35; }
 .am-card.kb-selected {
   border-color: var(--c-accent);
-  box-shadow: 0 0 0 3px rgba(59,125,216,.25);
+  box-shadow: 0 0 0 3px rgba(0,80,160,.25);
   background: var(--c-accent-light);
 }
 .am-card.kb-moving {
@@ -1262,8 +1277,8 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   to   { opacity: 0; transform: scale(.85);  max-height: 0; padding: 0; margin: 0; }
 }
 @keyframes drop-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(59,125,216,.4); }
-  50%       { box-shadow: 0 0 0 6px rgba(59,125,216,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,80,160,.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(0,80,160,0); }
 }
 @keyframes bounce-in {
   0%   { transform: scale(.9); }
