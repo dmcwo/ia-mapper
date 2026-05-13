@@ -1,0 +1,247 @@
+/* ═══════════════════════════════════════════════════════════════
+   IA Mapper — UI Skin
+   Tactile retro shell built around #A57865 (warm terracotta).
+   Loaded after style.css; overrides --c-* tokens and adds
+   surface treatments. Does NOT touch .pnav-*, .pmob-*, or
+   any .site-header--* rules — the preview area is untouched.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Warm palette token overrides ───────────────────────────── */
+:root {
+  /* Core accent — terracotta */
+  --c-accent:        #A57865;   /* borders, indicators, non-text accents */
+  --c-accent-light:  #F3EBE6;   /* hover / active tint backgrounds */
+  --c-accent-dark:   #7D5748;   /* button fills, pressed states (contrast-safe) */
+
+  /* Warm neutrals */
+  --c-bg:            #EDEBE7;   /* page / canvas background */
+  --c-surface:       #F5F3EF;   /* cards, panels, inputs */
+  --c-border:        #CFC5BB;   /* default borders */
+  --c-border-strong: #A8998E;   /* emphasis borders */
+
+  /* Warm text */
+  --c-text:          #261D18;   /* primary text */
+  --c-text-muted:    #6B5548;   /* secondary text — 5.8:1 on --c-bg */
+
+  /* Nested element cards */
+  --c-nested-bg:     #EDE5DF;
+
+  /* Warm-tinted shadows (swap blue-gray shadow tint for brown) */
+  --shadow-xs:   0 1px 2px rgba(80,45,25,.07);
+  --shadow-sm:   0 2px 6px rgba(80,45,25,.10), 0 1px 2px rgba(80,45,25,.06);
+  --shadow-md:   0 4px 16px rgba(80,45,25,.13), 0 2px 4px rgba(80,45,25,.07);
+  --shadow-lift: 0 8px 24px rgba(80,45,25,.22);
+}
+
+/* ── App header — top rail ──────────────────────────────────── */
+#app-header {
+  background: #DDD8D2;
+  border-bottom-color: var(--c-border-strong);
+  box-shadow: 0 1px 0 rgba(255,255,255,.55) inset, var(--shadow-xs);
+}
+
+/* App name: dark terracotta — passes 6.6:1 on header bg */
+.app-name { color: #5C3D2F; }
+
+/* ── Buttons ────────────────────────────────────────────────── */
+
+/* Plain icon/text buttons */
+.btn:hover:not(:disabled) {
+  background: var(--c-accent-light);
+  color: var(--c-text);
+}
+
+/* Primary — warm brown fill, tactile press */
+.btn--primary {
+  background: var(--c-accent-dark);
+  border-color: #5C3D2F;
+  box-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 2px 4px rgba(80,45,25,.22);
+}
+.btn--primary:hover:not(:disabled) {
+  background: #5C3D2F;
+  box-shadow: 0 1px 0 rgba(255,255,255,.10) inset, 0 1px 2px rgba(80,45,25,.18);
+}
+.btn--primary:active:not(:disabled) {
+  box-shadow: 0 1px 3px rgba(80,45,25,.25) inset;
+  transform: translateY(1px);
+}
+
+/* Ghost — clearly a surface, not a ghost */
+.btn--ghost {
+  background: var(--c-surface);
+  border-color: var(--c-border-strong);
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, var(--shadow-xs);
+}
+.btn--ghost:hover:not(:disabled) {
+  background: var(--c-accent-light);
+  border-color: var(--c-accent);
+  color: #5C3D2F;
+  box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, var(--shadow-xs);
+}
+.btn--ghost:active:not(:disabled) {
+  box-shadow: 0 1px 2px rgba(80,45,25,.18) inset;
+  transform: translateY(1px);
+}
+
+/* ── Preview bar — warm shelf ───────────────────────────────── */
+.preview-bar {
+  background: linear-gradient(to bottom, #E6E1DA, #DEDAD3);
+  border-bottom-color: var(--c-border-strong);
+}
+
+/* ── Theme + viewport toggle buttons ────────────────────────── */
+/* Inactive: slightly raised tile */
+.theme-btn,
+.vp-btn {
+  background: var(--c-surface);
+  border-color: var(--c-border-strong);
+  box-shadow: 0 1px 0 rgba(255,255,255,.75) inset, var(--shadow-xs);
+}
+.theme-btn:hover,
+.vp-btn:hover {
+  background: var(--c-accent-light);
+  border-color: var(--c-accent);
+  color: #5C3D2F;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, var(--shadow-xs);
+}
+/* Active: pressed in */
+.theme-btn.active, .theme-btn[aria-pressed="true"],
+.vp-btn.active,   .vp-btn[aria-pressed="true"] {
+  background: var(--c-accent-dark);
+  border-color: #5C3D2F;
+  color: #FAF8F5;
+  box-shadow: 0 1px 3px rgba(80,45,25,.28) inset;
+}
+
+/* ── Preview option toggles (Utility bar) ───────────────────── */
+.preview-opt-btn {
+  background: var(--c-surface);
+  border-color: var(--c-border);
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, var(--shadow-xs);
+}
+.preview-opt-btn:hover:not(:disabled) {
+  background: var(--c-accent-light);
+  border-color: var(--c-accent);
+  color: #5C3D2F;
+}
+.preview-opt-btn.active,
+.preview-opt-btn[aria-pressed="true"] {
+  background: var(--c-accent-light);
+  color: #5C3D2F;
+  border-color: var(--c-accent);
+  border-style: solid;
+}
+
+/* ── Site name input focus ring ─────────────────────────────── */
+.preview-sitename__input:focus {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 2px rgba(165,120,101,.22);
+}
+
+/* ── Element box input focus ring ───────────────────────────── */
+#eb-input:focus {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(165,120,101,.20);
+}
+
+/* ── Element box card — raised tile ─────────────────────────── */
+.eb-card {
+  background: var(--c-surface);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--c-border);
+}
+.eb-card:hover {
+  border-color: var(--c-accent);
+  box-shadow: var(--shadow-md);
+}
+.eb-card:focus-within {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(165,120,101,.22);
+}
+.eb-card[draggable="true"]:active {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-1px);
+}
+
+/* Drag handle: warm when visible */
+.drag-handle { color: var(--c-border-strong); }
+.eb-card:hover .drag-handle,
+.am-card:hover .drag-handle { color: var(--c-accent); }
+
+/* ── Architecture map canvas ────────────────────────────────── */
+#architecture-map { background: var(--c-bg); }
+
+/* Drag canvas background — warm tint during drag */
+body.is-dragging #am-canvas,
+body.is-kb-moving #am-canvas { background: var(--c-accent-light); }
+
+/* ── AM card ────────────────────────────────────────────────── */
+.am-card:focus-within {
+  box-shadow: 0 0 0 3px rgba(165,120,101,.22);
+}
+.am-card.kb-selected {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(165,120,101,.28);
+  background: var(--c-accent-light);
+}
+/* Nested card: warm border instead of hardcoded blue */
+.am-card.is-nested { border-color: var(--c-border); }
+
+/* Drop nest target */
+.am-card.drop-nest-target {
+  outline-color: var(--c-accent);
+  background: var(--c-accent-light) !important;
+}
+
+/* ── Drop line ──────────────────────────────────────────────── */
+.am-drop-line            { background: var(--c-accent-dark); }
+.am-drop-line::before    { background: var(--c-accent-dark); }
+
+/* ── Drop zone (empty root target) ─────────────────────────── */
+.drop-zone--root.drag-over,
+.drop-zone--root.kb-highlight {
+  background: var(--c-accent-light);
+  border-color: var(--c-accent);
+}
+
+/* ── AM status line — passes 4.95:1 on --c-bg ──────────────── */
+.am-status { color: var(--c-accent-dark); }
+
+/* ── Tree children connector line ───────────────────────────── */
+.tree-children { border-left-color: var(--c-border); }
+.tree-node:hover > .tree-children { border-left-color: var(--c-accent); }
+
+/* ── Utility zone dashed divider ────────────────────────────── */
+.am-col--utility { border-left-color: var(--c-border); }
+
+/* ── Collapsed badge ────────────────────────────────────────── */
+.collapsed-badge {
+  background: var(--c-surface);
+  border-color: var(--c-border);
+  color: var(--c-text-muted);
+}
+
+/* ── Dialogs ────────────────────────────────────────────────── */
+dialog { background: var(--c-surface); }
+dialog::backdrop { background: rgba(38,29,24,.52); }
+
+/* ── kbd shortcuts ──────────────────────────────────────────── */
+kbd {
+  background: var(--c-surface);
+  border-color: var(--c-border-strong);
+  box-shadow: 0 1px 0 var(--c-border-strong);
+}
+
+/* ── Scrollbars ─────────────────────────────────────────────── */
+::-webkit-scrollbar-thumb { background: var(--c-border-strong); }
+::-webkit-scrollbar-thumb:hover { background: var(--c-text-muted); }
+
+/* ── Default preview nav: warm hover tint ───────────────────── */
+/* The default (non-themed) nav uses --c-accent for hover color
+   and a hardcoded #EBF4FF for hover background — replace the
+   background with our warm equivalent so nothing looks out of place. */
+.pnav-sub li:hover > .pnav-item,
+.pmob-nav li:hover > .pmob-item { background: var(--c-accent-light); }
+
+/* ── Focus ring ─────────────────────────────────────────────── */
+:focus-visible { outline-color: var(--c-accent-dark); }
