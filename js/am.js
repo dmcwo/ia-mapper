@@ -69,6 +69,8 @@
 
     // Feature 8: render utility section
     renderUtility();
+
+    if (window.lucide) lucide.createIcons();
   }
 
   function collectIds(id, set, state) {
@@ -134,7 +136,6 @@
           '<button class="add-desc-btn' + (card.description ? ' is-hidden' : '') + '" type="button" aria-label="Add description">+ Add description</button>' +
         '</div>' +
         '<div class="am-card-actions">' +
-          '<button class="am-action-btn" data-action="edit" tabindex="-1" aria-label="Edit ' + esc(card.title) + '" title="Edit (E)"><i data-lucide="pencil"></i></button>' +
           '<button class="am-action-btn" data-action="toEB" tabindex="-1" aria-label="Return to Element Box" title="Return to Element Box (B)"><i data-lucide="corner-up-left"></i></button>' +
           '<button class="am-action-btn am-action-btn--danger" data-action="delete" tabindex="-1" aria-label="Delete ' + esc(card.title) + '" title="Delete (Del)"><i data-lucide="x"></i></button>' +
         '</div>' +

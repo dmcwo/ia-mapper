@@ -36,13 +36,13 @@
 
   --eb-width: 288px;
   --header-h: 52px;
-  --preview-h: 230px;
+  --preview-h: 196px;
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
 /* ── Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; }
+html { font-size: 16px; }
 body {
   font-family: var(--font);
   color: var(--c-text);
@@ -160,17 +160,18 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   overflow: visible;
 }
 .preview-bar {
-  display: flex; flex-direction: column; gap: 5px;
-  padding: 6px 16px 5px;
+  display: flex; flex-direction: row; align-items: center; gap: 6px;
+  padding: 6px 16px;
   flex-shrink: 0;
   background: var(--c-bg);
   border-bottom: 1px solid var(--c-border);
 }
-.preview-bar__row {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+.preview-bar__sep {
+  width: 1px; height: 22px;
+  background: var(--c-border-strong);
+  margin: 0 4px;
+  flex-shrink: 0;
 }
-.preview-bar__right { display: flex; align-items: center; gap: 8px; }
-.preview-title { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-muted); }
 
 /* ── Site name input ────────────────────────────────────────── */
 .preview-sitename { display: flex; align-items: center; }
@@ -828,6 +829,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   border-bottom: 1px solid var(--c-border);
   flex-shrink: 0;
 }
+.eb-header-actions { display: flex; align-items: center; gap: 2px; }
 .panel-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-muted); }
 
 .eb-add { padding: 10px 12px; border-bottom: 1px solid var(--c-border); flex-shrink: 0; }
@@ -1171,7 +1173,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .tree-toggle--hidden { visibility: hidden; pointer-events: none; }
 
 .am-card-actions {
-  margin-left: auto; display: flex; gap: 4px; flex-shrink: 0; align-items: flex-start;
+  margin-left: auto; display: flex; flex-direction: column; gap: 0; flex-shrink: 0; align-items: center;
 }
 .am-action-btn {
   min-width: 44px; min-height: 44px; border-radius: 5px;

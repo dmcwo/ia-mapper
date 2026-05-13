@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IAM — Information Architecture Mapper</title>
 
-  <link rel="stylesheet" href="css/style.css?v=14" />
-  <link rel="stylesheet" href="css/ui-skin.css?v=1" />
+  <link rel="stylesheet" href="css/style.css?v=15" />
+  <link rel="stylesheet" href="css/ui-skin.css?v=2" />
 
   <!-- Active nav theme CSS — href is swapped by preview.js; no href = no request -->
 </head>
@@ -32,8 +32,8 @@
         <button id="export-btn" class="btn btn--primary" aria-label="Export .md as Markdown file">
           <i data-lucide="download" aria-hidden="true"></i> Export .md
         </button>
-        <button id="shortcuts-btn" class="btn btn--ghost" aria-label="Show keyboard shortcuts" aria-expanded="false" aria-controls="shortcuts-dialog">
-          <i data-lucide="keyboard" aria-hidden="true"></i> Shortcuts
+        <button id="shortcuts-btn" class="btn btn--ghost" aria-label="Show keyboard controls" aria-expanded="false" aria-controls="shortcuts-dialog">
+          <i data-lucide="keyboard" aria-hidden="true"></i> Keyboard Control
         </button>
       </div>
     </header>
@@ -42,33 +42,19 @@
     <section id="preview-section" aria-label="Live menu preview">
       <div class="preview-bar">
 
-        <!-- Row 1: title + site name + option toggles + viewport -->
-        <div class="preview-bar__row">
-          <h2 class="preview-title">Menu Preview</h2>
-          <div class="preview-bar__right">
-            <div class="preview-opts" role="group" aria-label="Preview display options">
-              <button class="preview-opt-btn active" id="opt-utility-bar"
-                aria-pressed="true" title="Show or hide the utility navigation in the preview">
-                Utility bar
-              </button>
-            </div>
-            <div class="viewport-toggle" role="group" aria-label="Preview viewport size">
-              <button class="vp-btn active" data-vp="desktop" aria-pressed="true">Desktop</button>
-              <button class="vp-btn" data-vp="laptop" aria-pressed="false">Laptop</button>
-              <button class="vp-btn" data-vp="mobile" aria-pressed="false">Mobile</button>
-            </div>
-          </div>
+        <div class="theme-switcher" role="group" aria-label="Navigation theme style">
+          <button class="theme-btn active" data-theme="default" aria-pressed="true">Single row</button>
+          <button class="theme-btn" data-theme="1" aria-pressed="false">Two row</button>
+          <button class="theme-btn" data-theme="2" aria-pressed="false">Mega</button>
+          <button class="theme-btn" data-theme="4" aria-pressed="false">Compact</button>
         </div>
 
-        <!-- Row 2: theme style picker -->
-        <div class="preview-bar__row">
-          <div class="theme-switcher" role="group" aria-label="Navigation theme style">
-            <span class="preview-control-label" aria-hidden="true">Style</span>
-            <button class="theme-btn active" data-theme="default" aria-pressed="true">Single row</button>
-            <button class="theme-btn" data-theme="1" aria-pressed="false">Two row</button>
-            <button class="theme-btn" data-theme="2" aria-pressed="false">Mega</button>
-            <button class="theme-btn" data-theme="4" aria-pressed="false">Compact</button>
-          </div>
+        <div class="preview-bar__sep" aria-hidden="true"></div>
+
+        <div class="viewport-toggle" role="group" aria-label="Preview viewport size">
+          <button class="vp-btn active" data-vp="desktop" aria-pressed="true">Desktop</button>
+          <button class="vp-btn" data-vp="laptop" aria-pressed="false">Laptop</button>
+          <button class="vp-btn" data-vp="mobile" aria-pressed="false">Mobile</button>
         </div>
 
       </div>
@@ -86,8 +72,11 @@
       <aside id="element-box" aria-label="Element Box">
         <div class="eb-header">
           <h2 class="panel-title">Element Box</h2>
-          <button id="eb-collapse-btn" class="btn btn--ghost btn--sm"
-            aria-label="Collapse Element Box" title="Collapse (C)"><i data-lucide="panel-left-close" aria-hidden="true"></i></button>
+          <div class="eb-header-actions">
+            <button id="eb-clear-btn" class="btn btn--ghost btn--sm" title="Delete all Element Box cards"><i data-lucide="trash-2" aria-hidden="true"></i></button>
+            <button id="eb-collapse-btn" class="btn btn--ghost btn--sm"
+              aria-label="Collapse Element Box" title="Collapse (C)"><i data-lucide="panel-left-close" aria-hidden="true"></i></button>
+          </div>
         </div>
 
         <div class="eb-add">
@@ -131,7 +120,6 @@
           <p class="am-hint">Drag cards from the Element Box to build your IA</p>
           <div class="am-bulk-actions">
             <button id="am-clear-btn" class="btn btn--ghost btn--sm" title="Move all AM cards to Element Box"><i data-lucide="arrow-left" aria-hidden="true"></i> Clear AM</button>
-            <button id="eb-clear-btn" class="btn btn--ghost btn--sm" title="Delete all Element Box cards"><i data-lucide="trash-2" aria-hidden="true"></i> Clear EB</button>
             <button id="am-delete-btn" class="btn btn--ghost btn--sm btn--danger-ghost" title="Delete all AM cards permanently"><i data-lucide="trash-2" aria-hidden="true"></i> Delete All AM</button>
           </div>
         </div>
@@ -156,7 +144,7 @@
             <div id="am-zone-utility" class="am-zone-utility" hidden aria-hidden="true">
               <div class="am-zone-utility-header">
                 <span class="am-zone-label">Utility Menu</span>
-                <button id="utility-remove-btn" class="btn btn--ghost btn--sm" title="Remove utility menu">Remove</button>
+                <button id="utility-remove-btn" class="btn btn--icon am-zone-close-btn" aria-label="Remove utility menu" title="Remove utility menu"><i data-lucide="x" aria-hidden="true"></i></button>
               </div>
               <div id="am-utility-root-drop" class="drop-zone drop-zone--root" data-zone="utility" aria-label="Drop here to add utility items">
                 <span class="drop-zone__label">Drop here to add utility items</span>
@@ -176,8 +164,8 @@
   <!-- ── Keyboard Shortcuts Dialog ─────────────────────────── -->
   <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
     <div class="dialog-header">
-      <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
-      <button class="dialog-close" aria-label="Close shortcuts dialog">×</button>
+      <h2 id="shortcuts-title">Keyboard Controls</h2>
+      <button class="dialog-close" aria-label="Close keyboard controls dialog">×</button>
     </div>
     <div class="shortcuts-body">
 
@@ -314,8 +302,8 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="js/state.js?v=13"></script>
   <script src="js/eb.js?v=13"></script>
-  <script src="js/am.js?v=13"></script>
-  <script src="js/preview.js?v=14"></script>
+  <script src="js/am.js?v=14"></script>
+  <script src="js/preview.js?v=15"></script>
   <script src="js/export.js?v=13"></script>
   <script src="js/import.js?v=13"></script>
   <script src="js/app.js?v=13"></script>

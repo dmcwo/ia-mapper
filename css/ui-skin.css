@@ -243,5 +243,26 @@ kbd {
 .pnav-sub li:hover > .pnav-item,
 .pmob-nav li:hover > .pmob-item { background: var(--c-accent-light); }
 
+/* ── Utility zone close button ──────────────────────────────── */
+.am-zone-close-btn {
+  min-width: 32px; min-height: 32px;
+  border-radius: 50%;
+  color: var(--c-text-muted);
+  display: flex; align-items: center; justify-content: center;
+}
+.am-zone-close-btn:hover { background: var(--c-danger-light); color: var(--c-danger); }
+
+/* ── Panel / zone label sizes — nudge smallest text up ──────── */
+.panel-title        { font-size: .8rem; }
+.preview-control-label { font-size: .8rem; }
+.am-zone-label      { font-size: .78rem; }
+.shortcut-section-title { font-size: .78rem; }
+.preview-empty      { font-size: .88rem; }
+.hint-text          { font-size: .8rem; }
+.kb-hint            { font-size: .85rem; }
+
+/* ── Theme + viewport buttons: slightly larger tap targets ───── */
+.theme-btn, .vp-btn { font-size: .8rem; }
+
 /* ── Focus ring ─────────────────────────────────────────────── */
 :focus-visible { outline-color: var(--c-accent-dark); }

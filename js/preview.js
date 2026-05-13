@@ -7,7 +7,6 @@
 
   var currentVP    = 'desktop';
   var currentTheme = 'default';
-  var showUtility  = true;   // preview option: show utility nav section
   var siteName     = 'Site'; // customizable via the site name input field
 
   /* Theme '1' = Two-tier  (no external CSS — uses Default nav style)
@@ -48,7 +47,7 @@
      DEFAULT THEME
      ══════════════════════════════════════════════════════════ */
   function buildDefault(state) {
-    var hasUtil = showUtility && state.utilityEnabled && state.utilityIds.length > 0;
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
 
     var html = '<nav class="pnav-wrapper" aria-label="Preview navigation">' +
       '<div class="pnav-brand">' + esc(siteName) + '</div>' +
@@ -92,7 +91,7 @@
      Behaviour is identical to Default; just adds the utility tier.
      ══════════════════════════════════════════════════════════ */
   function buildThemeTwoTier(state) {
-    var hasUtil = showUtility && state.utilityEnabled && state.utilityIds.length > 0;
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
     var html = '';
 
     // Tier 1 — slim utility bar
@@ -122,7 +121,7 @@
      no individual flyout dropdowns.
      ══════════════════════════════════════════════════════════ */
   function buildThemeMega(state) {
-    var hasUtil = showUtility && state.utilityEnabled && state.utilityIds.length > 0;
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
 
     var html = '<header class="site-header site-header--mega">';
 
@@ -184,7 +183,7 @@
      inline within the flyout (never spawn another flyout).
      ══════════════════════════════════════════════════════════ */
   function buildThemeCompact(state) {
-    var hasUtil = showUtility && state.utilityEnabled && state.utilityIds.length > 0;
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
 
     var html = '<header class="site-header site-header--sticky">' +
       '<div class="primary-header"><div class="primary-header__inner">' +
@@ -295,7 +294,7 @@
      MOBILE PREVIEW (shared across all themes)
      ══════════════════════════════════════════════════════════ */
   function buildMobilePreview(state) {
-    var hasUtil = showUtility && state.utilityEnabled && state.utilityIds.length > 0;
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
 
     var html =
       '<div class="preview-mobile-chrome">' +
@@ -376,17 +375,6 @@
     document.head.appendChild(link);
   }
 
-  /* ── Option toggles ──────────────────────────────────────── */
-  function toggleUtility() {
-    showUtility = !showUtility;
-    var btn = document.getElementById('opt-utility-bar');
-    if (btn) {
-      btn.classList.toggle('active', showUtility);
-      btn.setAttribute('aria-pressed', String(showUtility));
-    }
-    render();
-  }
-
   /* ── Viewport toggle ─────────────────────────────────────── */
   function setViewport(vp) {
     currentVP = vp;
@@ -461,9 +449,6 @@
     document.querySelectorAll('.theme-btn').forEach(function (btn) {
       btn.addEventListener('click', function () { setTheme(btn.dataset.theme); });
     });
-
-    var utilBtn = document.getElementById('opt-utility-bar');
-    if (utilBtn) utilBtn.addEventListener('click', toggleUtility);
 
     var siteNameInput = document.getElementById('preview-site-name-input');
     if (siteNameInput) {
