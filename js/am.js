@@ -297,8 +297,8 @@
       if (relY < 0.30) {
         return { targetId: cardId, position: 'before', zone: zone };
 
-      } else if (relX > 0.40) {
-        // Right 60% of card below the top strip → child
+      } else if (relX > 0.33) {
+        // Right 67% of card below the top strip → child
         return { targetId: cardId, position: 'child', zone: zone };
 
       } else if (relY > 0.70) {
