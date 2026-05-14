@@ -270,8 +270,11 @@
       var cardId = allCards[i].el.dataset.cardId;
       var zone = allCards[i].zone;
 
-      // Extend hit area by 6px above/below to bridge the gap between cards
+      // Extend hit area by 6px above/below to bridge the gap between cards.
+      // Also require horizontal proximity so left-column (main) cards don't
+      // capture drags that are over the right-column (utility) zone.
       if (cy < r.top - 6 || cy > r.bottom + 6) continue;
+      if (cx < r.left - 20 || cx > r.right + 20) continue;
 
       var relY = (cy - r.top) / r.height;
 
@@ -660,6 +663,33 @@
       if (!kbMove) setStatus('');
     });
 
+    // Main root drop zone — explicit handler so canvas dragover can proceed to
+    // computeDropTarget even when the main tree is empty but utility has items.
+    var mainRootDrop = document.getElementById('am-root-drop');
+    if (mainRootDrop) {
+      mainRootDrop.addEventListener('dragover', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        e.dataTransfer.dropEffect = 'move';
+        mainRootDrop.classList.add('drag-over');
+        currentDropTarget = { targetId: null, position: 'root', zone: 'main' };
+        if (!kbMove) setStatus('Add as top-level page');
+      });
+      mainRootDrop.addEventListener('dragleave', function (e) {
+        if (!mainRootDrop.contains(e.relatedTarget)) mainRootDrop.classList.remove('drag-over');
+      });
+      mainRootDrop.addEventListener('drop', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        mainRootDrop.classList.remove('drag-over');
+        var cardId = e.dataTransfer.getData('text/plain');
+        if (!cardId) return;
+        var card = State.getCard(cardId);
+        if (!card) return;
+        State.moveToAM(cardId, null, null);
+        announce(card.title + ' added to Architecture Map.');
+        if (!kbMove) setStatus('');
+      });
+    }
+
     canvas.addEventListener('dragover', function (e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
@@ -667,9 +697,8 @@
       var rootDrop = document.getElementById('am-root-drop');
       var state    = State.getState();
 
-      // Empty tree → activate root drop zone, no line needed
-      if (state.rootIds.length === 0) {
-        if (rootDrop) rootDrop.classList.add('drag-over');
+      // Completely empty canvas — fallback in case root drop zone doesn't capture the event
+      if (state.rootIds.length === 0 && state.utilityIds.length === 0) {
         currentDropTarget = { targetId: null, position: 'root', zone: 'main' };
         if (!kbMove) setStatus('Add as top-level page');
         return;
@@ -852,10 +881,11 @@
     var cardId = kbMove.cardId;
     var card   = State.getCard(cardId);
     cancelKbMove();
+    var moveFn = (pos.zone === 'utility') ? State.moveToUtility : State.moveToAM;
     if (pos.position === 'root') {
       State.moveToAM(cardId, null, null);
     } else {
-      State.moveToAM(cardId, pos.targetId, pos.position);
+      moveFn(cardId, pos.targetId, pos.position);
     }
     announce((card ? card.title : 'Card') + ' moved: ' + pos.label + '.');
   }
@@ -866,8 +896,19 @@
     var cardId = kbMove.cardId;
     var card   = State.getCard(cardId);
     cancelKbMove();
-    State.moveToAM(cardId, targetCardId, 'child');
-    announce((card ? card.title : 'Card') + ' placed as child of ' + (State.getCard(targetCardId) || {}).title + '.');
+    var moveFn = isInUtilityZone(targetCardId, State.getState()) ? State.moveToUtility : State.moveToAM;
+    moveFn(cardId, targetCardId, 'child');
+    announce((card ? card.title : 'Card') + ' placed as child of ' + ((State.getCard(targetCardId) || {}).title || '') + '.');
+  }
+
+  function isInUtilityZone(id, state) {
+    var card = state.cards[id];
+    while (card) {
+      if (state.utilityIds.indexOf(card.id) !== -1) return true;
+      if (!card.parentId) return false;
+      card = state.cards[card.parentId];
+    }
+    return false;
   }
 
   function cancelKbMove() {
@@ -904,18 +945,18 @@
 
     // Tree positions first (relative moves near current location)
     state.rootIds.forEach(function (id) {
-      addPositionsForNode(id, movingId, rawList, state);
+      addPositionsForNode(id, movingId, rawList, state, 'main');
     });
 
     // Feature 8: include utility zone positions when enabled
     if (state.utilityEnabled) {
       state.utilityIds.forEach(function (id) {
-        addPositionsForNode(id, movingId, rawList, state);
+        addPositionsForNode(id, movingId, rawList, state, 'utility');
       });
     }
 
     // 'root' goes last — it's a drastic cross-hierarchy move, rarely the intent
-    rawList.push({ targetId: '', position: 'root', label: 'Add as top-level page' });
+    rawList.push({ targetId: '', position: 'root', zone: 'main', label: 'Add as top-level page' });
 
     return dedupePositions(rawList, state);
   }
@@ -1002,30 +1043,30 @@
     return result;
   }
 
-  function addPositionsForNode(id, movingId, positions, state) {
+  function addPositionsForNode(id, movingId, positions, state, zone) {
     if (id === movingId) return;
     var card = state.cards[id];
     if (!card || card.location !== 'am') return;
 
     var movingCard = state.cards[movingId];
 
-    positions.push({ targetId: id, position: 'before', label: 'Before "'       + card.title + '"' });
-    positions.push({ targetId: id, position: 'child',  label: 'Child of "'      + card.title + '"' });
-    positions.push({ targetId: id, position: 'after',  label: 'After "'         + card.title + '"' });
+    positions.push({ targetId: id, position: 'before', zone: zone, label: 'Before "'  + card.title + '"' });
+    positions.push({ targetId: id, position: 'child',  zone: zone, label: 'Child of "' + card.title + '"' });
+    positions.push({ targetId: id, position: 'after',  zone: zone, label: 'After "'    + card.title + '"' });
 
     if (card.parentId) {
       var parentCard = state.cards[card.parentId];
-      positions.push({ targetId: card.parentId, position: 'after',
+      positions.push({ targetId: card.parentId, position: 'after', zone: zone,
         label: 'Promote up — sibling after "' + (parentCard ? parentCard.title : 'parent') + '"' });
     }
 
     if (movingCard && movingCard.location !== 'nested') {
-      positions.push({ targetId: id, position: 'nest', label: 'Nest inside "' + card.title + '" as element' });
+      positions.push({ targetId: id, position: 'nest', zone: zone, label: 'Nest inside "' + card.title + '" as element' });
     }
 
     if (!collapsedNodes[id]) {
       card.childIds.forEach(function (cid) {
-        addPositionsForNode(cid, movingId, positions, state);
+        addPositionsForNode(cid, movingId, positions, state, zone);
       });
     }
   }
