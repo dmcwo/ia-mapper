@@ -1128,10 +1128,8 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   transition: box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
   position: relative;
   overflow: visible; /* allow focus outlines and drop-nest outline to render outside bounds */
-  /* Responsive width: grows with content, bounded by min/max */
-  width: fit-content;
-  min-width: 200px;
-  max-width: 360px;
+  width: 100%;
+  min-width: 0;
 }
 .am-card:hover { border-color: var(--c-border-strong); box-shadow: var(--shadow-md); }
 .am-card:focus-within { box-shadow: 0 0 0 3px rgba(0,80,160,.15); }

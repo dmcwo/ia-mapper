@@ -118,7 +118,7 @@
     el.dataset.nodeId = card.id;
 
     var hasChildren = card.childIds.length > 0;
-    var badgeCount  = card.childIds.length + card.nestedIds.length;
+    var badgeCount  = countDescendants(card.id, State.getState());
 
     // Feature 5: is-empty on desc text, add-desc-btn
     el.innerHTML =
@@ -1051,6 +1051,17 @@
   /* ── Init ────────────────────────────────────────────────── */
   function init() {
     initDragDrop();
+
+    // Card controls visibility toggle
+    var controlsBtn = document.getElementById('am-controls-btn');
+    if (controlsBtn) {
+      controlsBtn.addEventListener('click', function () {
+        var canvas = document.getElementById('am-canvas');
+        var active = canvas.classList.toggle('am-show-controls');
+        controlsBtn.setAttribute('aria-pressed', String(active));
+        controlsBtn.setAttribute('aria-label', active ? 'Hide card controls' : 'Show card controls');
+      });
+    }
 
     // Feature 8: wire utility toggle buttons
     var addUtilityBtn = document.getElementById('add-utility-btn');
