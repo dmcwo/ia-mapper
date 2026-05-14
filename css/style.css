@@ -1018,14 +1018,14 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   align-items: flex-start;
   gap: 20px;
 }
-/* Two-column layout: main IA tree | utility menu */
-.am-col { flex: 1; min-width: 0; }
+/* Two-column layout: main IA tree | utility menu — equal 50/50 split */
+.am-col { flex: 1 1 0; min-width: 0; }
 .am-col--main {
-  flex: 3 1 260px;      /* takes ~60% on wide, wraps utility out at ~480px */
+  flex: 1 1 200px;      /* grows equally with utility; wraps below ~420px canvas width */
 }
 .am-col--utility {
-  flex: 2 1 220px;      /* takes ~40% on wide, capped */
-  max-width: 360px;
+  flex: 1 1 200px;      /* same growth rate as main → true 50/50 */
+  max-width: none;      /* no artificial cap */
   margin-left: 0;       /* gap on #am-canvas handles spacing */
   padding-left: 20px;
   border-left: 2px dashed var(--c-border);
@@ -1038,6 +1038,13 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 }
 .am-col--utility .am-add-zone-btn {
   margin-top: 0;
+}
+/* Stacked layout (narrow canvas): switch left border to top border */
+@media (max-width: 720px) {
+  .am-col--utility {
+    padding-left: 0;
+    border-left: none;
+  }
 }
 #am-tree {
   display: inline-block;

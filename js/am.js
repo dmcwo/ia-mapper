@@ -242,15 +242,37 @@
   function computeDropTarget(e, canvas) {
     var draggingId = document.body.dataset.draggingId;
     var state = State.getState();
+    var cy = e.clientY;
+    var cx = e.clientX;
+    var draggingCard = draggingId ? State.getCard(draggingId) : null;
+
+    // In side-by-side layout the columns have distinct X ranges — use cursor X
+    // to pick which zone to search.  In stacked layout both columns share the
+    // same X range but have non-overlapping Y ranges, so searching both is
+    // correct (the Y loop picks the right card).
+    var mainCol  = document.querySelector('.am-col--main');
+    var utilCol  = document.querySelector('.am-col--utility');
+    var mainRect = mainCol ? mainCol.getBoundingClientRect() : null;
+    var utilRect = utilCol ? utilCol.getBoundingClientRect() : null;
+    var sideBySide = mainRect && utilRect && utilRect.left >= mainRect.right - 10;
+
+    var checkMain    = true;
+    var checkUtility = state.utilityEnabled;
+    if (sideBySide) {
+      checkMain    = cx <= utilRect.left + 20;           // cursor in left col or at boundary
+      checkUtility = state.utilityEnabled && cx >= mainRect.right - 20; // cursor in right col or at boundary
+    }
 
     // Target only non-nested page cards; skip the card being dragged
-    var mainCards = Array.from(document.querySelectorAll('#am-tree .am-card:not(.is-nested)'));
-    var utilityCards = state.utilityEnabled
+    var mainCards = checkMain
+      ? Array.from(document.querySelectorAll('#am-tree .am-card:not(.is-nested)'))
+      : [];
+    var utilityCards = checkUtility
       ? Array.from(document.querySelectorAll('#am-utility-tree .am-card:not(.is-nested)'))
       : [];
 
     if (draggingId) {
-      mainCards = mainCards.filter(function (c) { return c.dataset.cardId !== draggingId; });
+      mainCards    = mainCards.filter(function (c) { return c.dataset.cardId !== draggingId; });
       utilityCards = utilityCards.filter(function (c) { return c.dataset.cardId !== draggingId; });
     }
 
@@ -261,20 +283,13 @@
       return { targetId: null, position: 'root', zone: 'main' };
     }
 
-    var cy = e.clientY;
-    var cx = e.clientX;
-    var draggingCard = draggingId ? State.getCard(draggingId) : null;
-
     for (var i = 0; i < allCards.length; i++) {
-      var r = allCards[i].el.getBoundingClientRect();
+      var r      = allCards[i].el.getBoundingClientRect();
       var cardId = allCards[i].el.dataset.cardId;
-      var zone = allCards[i].zone;
+      var zone   = allCards[i].zone;
 
-      // Extend hit area by 6px above/below to bridge the gap between cards.
-      // Also require horizontal proximity so left-column (main) cards don't
-      // capture drags that are over the right-column (utility) zone.
+      // Extend hit area by 6px above/below to bridge the gap between cards
       if (cy < r.top - 6 || cy > r.bottom + 6) continue;
-      if (cx < r.left - 20 || cx > r.right + 20) continue;
 
       var relY = (cy - r.top) / r.height;
 
