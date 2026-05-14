@@ -69,13 +69,28 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 /* Ensure the HTML `hidden` attribute is never overridden by CSS display rules */
 [hidden] { display: none !important; }
 
+/* ── Skip link ──────────────────────────────────────────────── */
+.skip-link {
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; overflow: hidden;
+}
+.skip-link:focus {
+  position: fixed; left: 12px; top: 12px;
+  width: auto; height: auto; overflow: visible;
+  padding: 8px 16px; border-radius: var(--r-sm);
+  background: var(--c-text); color: var(--c-surface);
+  font-size: .9rem; font-weight: 600;
+  z-index: 9999; text-decoration: none;
+  box-shadow: var(--shadow-md);
+}
+
 /* ── Utilities ──────────────────────────────────────────────── */
 .sr-only {
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
-.hint-text { font-size: .75rem; color: var(--c-text-muted); margin-top: 4px; }
+.hint-text { font-size: .75rem; color: var(--c-text-muted); margin-top: 4px; line-height: 1.5; }
 
 /* ── Buttons ────────────────────────────────────────────────── */
 .btn {
@@ -84,7 +99,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   font-size: .85rem; font-weight: 500; line-height: 1;
   min-height: 44px;
   transition: background var(--t-fast), color var(--t-fast), opacity var(--t-fast), box-shadow var(--t-fast);
-  color: var(--c-text-muted);
+  color: var(--c-text);
   border: 1px solid transparent;
 }
 .btn:hover:not(:disabled) { background: var(--c-bg); color: var(--c-text); }
@@ -97,13 +112,13 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   background: var(--c-accent); color: #fff; border-color: var(--c-accent-dark);
 }
 .btn--primary:hover:not(:disabled) { background: var(--c-accent-dark); color: #fff; }
-.btn--ghost { border: 1px solid var(--c-border); background: var(--c-surface); color: var(--c-text-muted); }
+.btn--ghost { border: 1px solid var(--c-border); background: var(--c-surface); color: var(--c-text); }
 .btn--ghost:hover:not(:disabled) { border-color: var(--c-border-strong); color: var(--c-text); }
 .btn--danger { background: var(--c-danger); color: #fff; border-color: #B91C1C; }
 .btn--danger-ghost { border-color: var(--c-danger); color: var(--c-danger); }
 .btn--danger-ghost:hover:not(:disabled) { background: var(--c-danger-light); color: var(--c-danger); }
 .btn--danger:hover:not(:disabled) { background: #7F1D1D; color: #fff; }
-.btn--sm { padding: 4px 9px; font-size: .8rem; }
+.btn--sm { padding: 4px 9px; font-size: .8rem; min-width: 44px; }
 .btn--full { width: 100%; justify-content: center; }
 .btn--icon span { font-size: 1em; }
 
@@ -862,6 +877,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .kb-hint {
   padding: 6px 12px; font-size: .8rem; color: var(--c-text-muted);
   border-top: 1px solid var(--c-border); flex-shrink: 0; text-align: center;
+  line-height: 1.5;
 }
 
 /* ── Collapsed EB rail ──────────────────────────────────────── */
@@ -988,7 +1004,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   border-bottom: 1px solid var(--c-border);
   flex-shrink: 0; flex-wrap: wrap;
 }
-.am-hint { font-size: .75rem; color: var(--c-text-muted); flex-basis: 100%; order: 10; margin-top: 2px; }
+.am-hint { font-size: .75rem; color: var(--c-text-muted); flex-basis: 100%; order: 10; margin-top: 2px; line-height: 1.5; }
 .am-bulk-actions { display: flex; gap: 4px; margin-left: auto; }
 
 /* Site name field embedded in the AM header */

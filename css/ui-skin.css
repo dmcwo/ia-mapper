@@ -21,7 +21,7 @@
 
   /* Warm text */
   --c-text:          #261D18;   /* primary text */
-  --c-text-muted:    #6B5548;   /* secondary text — 5.8:1 on --c-bg */
+  --c-text-muted:    #5C3D2F;   /* secondary text — 7.3:1 on --c-bg, AAA */
 
   /* Nested element cards */
   --c-nested-bg:     #EDE5DF;
@@ -222,8 +222,8 @@ body.is-kb-moving #am-canvas { background: var(--c-accent-light); }
   border-color: var(--c-accent);
 }
 
-/* ── AM status line — passes 4.95:1 on --c-bg ──────────────── */
-.am-status { color: var(--c-accent-dark); }
+/* ── AM status line ─────────────────────────────────────────── */
+.am-status { color: var(--c-text-muted); }
 
 /* ── Tree children connector line ───────────────────────────── */
 .tree-children { border-left-color: var(--c-border); }
@@ -291,14 +291,6 @@ kbd {
   color: var(--c-danger);
 }
 
-/* ── Utility zone close button ──────────────────────────────── */
-.am-zone-close-btn {
-  min-width: 32px; min-height: 32px;
-  border-radius: 50%;
-  color: var(--c-text-muted);
-  display: flex; align-items: center; justify-content: center;
-}
-.am-zone-close-btn:hover { background: var(--c-danger-light); color: var(--c-danger); }
 
 /* ── Panel / zone label sizes — nudge smallest text up ──────── */
 .panel-title        { font-size: .8rem; }

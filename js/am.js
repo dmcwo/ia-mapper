@@ -1132,19 +1132,6 @@
       });
     }
 
-    var utilityRemoveBtn = document.getElementById('utility-remove-btn');
-    if (utilityRemoveBtn) {
-      utilityRemoveBtn.addEventListener('click', function () {
-        var state = State.getState();
-        var hasCards = state.utilityIds.length > 0;
-        var msg = hasCards
-          ? 'Remove the Utility Menu? The ' + state.utilityIds.length + ' item(s) will remain in the Architecture Map but the section will be hidden.'
-          : 'Remove the Utility Menu section?';
-        if (window.confirm(msg)) {
-          State.toggleUtility();
-        }
-      });
-    }
 
     // When the canvas itself receives keyboard focus (via Tab), forward to first card.
     var canvas = document.getElementById('am-canvas');
