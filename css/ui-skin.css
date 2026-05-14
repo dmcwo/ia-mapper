@@ -83,28 +83,45 @@
   transform: translateY(1px);
 }
 
-/* ── Preview bar — warm shelf ───────────────────────────────── */
-.preview-bar {
-  background: linear-gradient(to bottom, #E6E1DA, #DEDAD3);
-  border-bottom-color: var(--c-border-strong);
+/* ── Preview area — dark stage, white viewport ──────────────── */
+#preview-section {
+  background: #252120;
+  border-bottom: none;
+  padding-bottom: 28px;
 }
 
-/* ── Theme + viewport toggle buttons ────────────────────────── */
-/* Inactive: slightly raised tile */
+.preview-bar {
+  background: #252120;
+  border-bottom-color: rgba(255,255,255,.08);
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.preview-bar__sep { background: rgba(255,255,255,.15); }
+
+/* White page card — nav renders on a realistic light background */
+#preview-frame {
+  margin: 0 24px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.22);
+}
+
+/* ── Theme + viewport toggle buttons (on dark bar) ───────────── */
 .theme-btn,
 .vp-btn {
-  background: var(--c-surface);
-  border-color: var(--c-border-strong);
-  box-shadow: 0 1px 0 rgba(255,255,255,.75) inset, var(--shadow-xs);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+  color: rgba(255,255,255,.60);
+  box-shadow: none;
 }
 .theme-btn:hover,
 .vp-btn:hover {
-  background: var(--c-accent-light);
-  border-color: var(--c-accent);
-  color: #5C3D2F;
-  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, var(--shadow-xs);
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.30);
+  color: rgba(255,255,255,.92);
+  box-shadow: none;
 }
-/* Active: pressed in */
 .theme-btn.active, .theme-btn[aria-pressed="true"],
 .vp-btn.active,   .vp-btn[aria-pressed="true"] {
   background: var(--c-accent-dark);
@@ -113,26 +130,27 @@
   box-shadow: 0 1px 3px rgba(80,45,25,.28) inset;
 }
 
-/* ── Preview option toggles (Utility bar) ───────────────────── */
+/* ── Preview option toggles (Utility bar) on dark bar ───────── */
 .preview-opt-btn {
-  background: var(--c-surface);
-  border-color: var(--c-border);
-  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, var(--shadow-xs);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+  color: rgba(255,255,255,.60);
+  box-shadow: none;
 }
 .preview-opt-btn:hover:not(:disabled) {
-  background: var(--c-accent-light);
-  border-color: var(--c-accent);
-  color: #5C3D2F;
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.30);
+  color: rgba(255,255,255,.92);
 }
 .preview-opt-btn.active,
 .preview-opt-btn[aria-pressed="true"] {
-  background: var(--c-accent-light);
-  color: #5C3D2F;
+  background: rgba(165,120,101,.28);
+  color: #E8C8B8;
   border-color: var(--c-accent);
   border-style: solid;
 }
 
-/* ── Site name input focus ring ─────────────────────────────── */
+/* ── Site name input focus ring (in AM header, light bg) ─────── */
 .preview-sitename__input:focus {
   border-color: var(--c-accent);
   box-shadow: 0 0 0 2px rgba(165,120,101,.22);
