@@ -1,13 +1,14 @@
 /* ── Theme 5: Rich Dropdown ─────────────────────────────────────
    Modelled on a CodePen mega-menu pattern.
-   Dark nav bar + wide card panel (icon + title + description tiles).
+   Light nav bar + wide card panel (icon + title + description tiles).
    Class prefix: prich-
    No external dependencies — pure CSS.
    ──────────────────────────────────────────────────────────────── */
 
 /* ── Header bar ─────────────────────────────────────────────── */
 .prich-header {
-  background: #1a1a1a;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,.10);
   position: relative;
   z-index: 10;
 }
@@ -23,7 +24,7 @@
 
 /* ── Brand ──────────────────────────────────────────────────── */
 .prich-brand {
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 700;
   font-size: 1rem;
   white-space: nowrap;
@@ -56,7 +57,7 @@
   align-items: center;
   gap: 4px;
   padding: 14px 14px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #1a1a1a;
   font-size: 0.875rem;
   font-weight: 500;
   background: none;
@@ -71,8 +72,8 @@
 
 .prich-link:hover,
 .prich-item--has-panel:hover > .prich-link {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  color: #1a1a1a;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* ── Chevron indicator ──────────────────────────────────────── */
@@ -97,7 +98,7 @@
 }
 
 .prich-util-link {
-  color: rgba(255, 255, 255, 0.6);
+  color: #555555;
   font-size: 0.8rem;
   text-decoration: none;
   padding: 6px 10px;
@@ -107,8 +108,8 @@
 }
 
 .prich-util-link:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  color: #1a1a1a;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* ── Dropdown panel ─────────────────────────────────────────── */
