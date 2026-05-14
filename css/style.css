@@ -877,6 +877,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   font-size: .7rem; font-weight: 700; color: var(--c-text-muted);
   writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .05em;
 }
+.eb-rail-count:empty { display: none; }
 
 /* ── Element Card (in EB) ───────────────────────────────────── */
 .eb-card {

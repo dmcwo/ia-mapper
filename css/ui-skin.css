@@ -255,6 +255,11 @@ kbd {
 #am-canvas.am-show-controls .am-action-btn {
   color: var(--c-text-muted);
 }
+/* Danger hover must beat the high-specificity always-visible rule above */
+#am-canvas.am-show-controls .am-action-btn--danger:hover {
+  background: var(--c-danger-light);
+  color: var(--c-danger);
+}
 
 /* ── Utility zone close button ──────────────────────────────── */
 .am-zone-close-btn {
