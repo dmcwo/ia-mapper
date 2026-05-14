@@ -1,0 +1,208 @@
+/* ── Theme 5: Rich Dropdown ─────────────────────────────────────
+   Modelled on a CodePen mega-menu pattern.
+   Dark nav bar + wide card panel (icon + title + description tiles).
+   Class prefix: prich-
+   No external dependencies — pure CSS.
+   ──────────────────────────────────────────────────────────────── */
+
+/* ── Header bar ─────────────────────────────────────────────── */
+.prich-header {
+  background: #1a1a1a;
+  position: relative;
+  z-index: 10;
+}
+
+.prich-inner {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 24px;
+}
+
+/* ── Brand ──────────────────────────────────────────────────── */
+.prich-brand {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+  padding: 14px 0;
+  flex-shrink: 0;
+}
+
+/* ── Primary nav ────────────────────────────────────────────── */
+.prich-nav {
+  flex: 1;
+}
+
+.prich-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* ── Nav item ───────────────────────────────────────────────── */
+.prich-item {
+  position: relative;
+}
+
+/* ── Nav link / button ──────────────────────────────────────── */
+.prich-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: inherit;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.prich-link:hover,
+.prich-item--has-panel:hover > .prich-link {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Chevron indicator ──────────────────────────────────────── */
+.prich-chevron {
+  font-size: 0.7em;
+  opacity: 0.7;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.prich-item--has-panel:hover .prich-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Utility links (right-aligned) ─────────────────────────── */
+.prich-utility {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.prich-util-link {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.prich-util-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Dropdown panel ─────────────────────────────────────────── */
+.prich-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 480px;
+  max-width: 640px;
+  max-height: 480px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 0 10px 10px 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  z-index: 100;
+}
+
+.prich-item--has-panel:hover .prich-panel {
+  display: block;
+}
+
+/* ── Panel: flip rightward when near right edge ─────────────── */
+.prich-panel--flip-right {
+  left: auto;
+  right: 0;
+  border-radius: 10px 0 10px 10px;
+}
+
+/* ── Card grid ──────────────────────────────────────────────── */
+.prich-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+/* ── Individual card ────────────────────────────────────────── */
+.prich-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.prich-card:hover {
+  background: #f5f5f5;
+}
+
+/* ── Card icon ──────────────────────────────────────────────── */
+.prich-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Six cycling color swatches */
+.prich-icon--0 { background: #FFF3E0; color: #E65100; }
+.prich-icon--1 { background: #E3F2FD; color: #1565C0; }
+.prich-icon--2 { background: #E8F5E9; color: #2E7D32; }
+.prich-icon--3 { background: #F3E5F5; color: #6A1B9A; }
+.prich-icon--4 { background: #FCE4EC; color: #880E4F; }
+.prich-icon--5 { background: #E8EAF6; color: #283593; }
+
+/* ── Card body ──────────────────────────────────────────────── */
+.prich-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.prich-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.prich-card-desc {
+  font-size: 0.78rem;
+  color: #555555;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

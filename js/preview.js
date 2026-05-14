@@ -14,7 +14,8 @@
      Theme '4' = Compact    (compact-sticky CSS)                    */
   var THEME_CSS_FILE = {
     '2': 'css/theme-1-utility-dropdown.css',
-    '4': 'css/theme-4-compact-sticky.css'
+    '4': 'css/theme-4-compact-sticky.css',
+    '5': 'css/theme-5-rich-dropdown.css'
   };
 
   /* ── Main render ─────────────────────────────────────────── */
@@ -39,6 +40,7 @@
       case '1': return buildThemeTwoTier(state);
       case '2': return buildThemeMega(state);
       case '4': return buildThemeCompact(state);
+      case '5': return buildThemeRich(state);
       default:  return buildDefault(state);
     }
   }
@@ -291,6 +293,66 @@
   }
 
   /* ══════════════════════════════════════════════════════════
+     THEME 5 — Rich dropdown
+     Dark nav bar + wide card panel with icon+title+desc tiles.
+     ══════════════════════════════════════════════════════════ */
+  function buildThemeRich(state) {
+    var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
+
+    var html = '<header class="prich-header">' +
+      '<div class="prich-inner">' +
+      '<div class="prich-brand">' + esc(siteName) + '</div>' +
+      '<nav class="prich-nav" aria-label="Primary navigation">' +
+      '<ul class="prich-list">';
+
+    state.rootIds.forEach(function(id) { html += buildRichNavItem(id, state); });
+
+    html += '</ul></nav>';
+
+    if (hasUtil) {
+      html += '<div class="prich-utility">';
+      state.utilityIds.forEach(function(id) {
+        var c = state.cards[id];
+        if (c) html += '<a class="prich-util-link">' + esc(c.title) + '</a>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div></header>';
+    return html;
+  }
+
+  function buildRichNavItem(id, state) {
+    var card = state.cards[id];
+    if (!card) return '';
+    var hasChildren = card.childIds.length > 0;
+
+    if (!hasChildren) {
+      return '<li class="prich-item"><a class="prich-link">' + esc(card.title) + '</a></li>';
+    }
+
+    var grid = '<div class="prich-grid">';
+    card.childIds.forEach(function(cid, idx) {
+      var child = state.cards[cid];
+      if (!child) return;
+      var initial = esc((child.title || '?').charAt(0).toUpperCase());
+      grid += '<a class="prich-card">' +
+        '<div class="prich-card-icon prich-icon--' + (idx % 6) + '">' + initial + '</div>' +
+        '<div class="prich-card-body">' +
+        '<div class="prich-card-title">' + esc(child.title) + '</div>' +
+        (child.description ? '<div class="prich-card-desc">' + esc(child.description) + '</div>' : '') +
+        '</div></a>';
+    });
+    grid += '</div>';
+
+    return '<li class="prich-item prich-item--has-panel">' +
+      '<button class="prich-link prich-link--parent">' +
+      esc(card.title) + ' <span class="prich-chevron" aria-hidden="true">&#9662;</span></button>' +
+      '<div class="prich-panel">' + grid + '</div>' +
+      '</li>';
+  }
+
+  /* ══════════════════════════════════════════════════════════
      MOBILE PREVIEW (shared across all themes)
      ══════════════════════════════════════════════════════════ */
   function buildMobilePreview(state) {
@@ -405,6 +467,19 @@
       var itemRight  = item.getBoundingClientRect().right;
       var subWidth   = sub.offsetWidth || 220;
       sub.classList.toggle('flip-left', itemRight + subWidth > frameRight - 8);
+    }, true);
+
+    // Rich theme: flip panel rightward when it overflows the preview frame
+    content.addEventListener('mouseenter', function(e) {
+      var item = e.target && e.target.closest && e.target.closest('.prich-item--has-panel');
+      if (!item) return;
+      var panel = item.querySelector('.prich-panel');
+      if (!panel) return;
+      var frame = document.getElementById('preview-frame');
+      var frameRight = frame ? frame.getBoundingClientRect().right : window.innerWidth;
+      var itemLeft = item.getBoundingClientRect().left;
+      var panelWidth = panel.offsetWidth || 480;
+      panel.classList.toggle('prich-panel--flip-right', itemLeft + panelWidth > frameRight - 8);
     }, true);
   }
 
