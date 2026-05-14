@@ -452,8 +452,15 @@
 
     var siteNameInput = document.getElementById('preview-site-name-input');
     if (siteNameInput) {
+      // Restore persisted site name
+      var savedName = localStorage.getItem('ia-site-name');
+      if (savedName !== null) {
+        siteNameInput.value = savedName;
+        siteName = savedName || 'Site';
+      }
       siteNameInput.addEventListener('input', function () {
         siteName = siteNameInput.value || 'Site';
+        localStorage.setItem('ia-site-name', siteNameInput.value);
         render();
       });
     }
