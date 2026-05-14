@@ -292,16 +292,21 @@
       if (cy < r.top - 6 || cy > r.bottom + 6) continue;
 
       var relY = (cy - r.top) / r.height;
+      var relX = (cx - r.left) / r.width;
 
-      if (relY < 0.33) {
+      if (relY < 0.30) {
         return { targetId: cardId, position: 'before', zone: zone };
 
-      } else if (relY > 0.67) {
-        var relX = (cx - r.left) / r.width;
-        return { targetId: cardId, position: relX > 0.6 ? 'child' : 'after', zone: zone };
+      } else if (relX > 0.40) {
+        // Right 60% of card below the top strip → child
+        return { targetId: cardId, position: 'child', zone: zone };
+
+      } else if (relY > 0.70) {
+        // Left 40%, bottom 30% → after
+        return { targetId: cardId, position: 'after', zone: zone };
 
       } else {
-        // Middle zone — nest if allowed
+        // Left 40%, middle 40% — nest if allowed, else after
         var targetCard = State.getCard(cardId);
         var canNest = targetCard && targetCard.location === 'am' &&
                       draggingCard && draggingCard.location !== 'nested';
