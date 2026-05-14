@@ -118,7 +118,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .btn--danger-ghost { border-color: var(--c-danger); color: var(--c-danger); }
 .btn--danger-ghost:hover:not(:disabled) { background: var(--c-danger-light); color: var(--c-danger); }
 .btn--danger:hover:not(:disabled) { background: #7F1D1D; color: #fff; }
-.btn--sm { padding: 4px 9px; font-size: .8rem; min-width: 44px; }
+.btn--sm { padding: 4px 9px; font-size: .8rem; min-width: 44px; justify-content: center; }
 .btn--full { width: 100%; justify-content: center; }
 .btn--icon span { font-size: 1em; }
 
