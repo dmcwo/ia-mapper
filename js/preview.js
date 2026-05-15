@@ -38,6 +38,7 @@
       : buildDesktopPreview(state);
 
     if (currentTheme === '2') requestAnimationFrame(alignMegaSpacer);
+    if (window.lucide) lucide.createIcons();
   }
 
   /* ── Route to the right desktop builder ─────────────────── */
@@ -386,11 +387,17 @@
       return html;
     }
 
-    // L1 leaf or any child item
+    // depth >= 1: show item, recurse children inline (no nested accordion)
+    var paddingLeft = 16 + (depth - 1) * 10;
     var html = '<li>' +
-      '<span class="pmob-item' + (depth > 0 ? ' pmob-item--child' : '') + '">' +
-      esc(card.title) + '</span>' +
-      '</li>';
+      '<span class="pmob-item pmob-item--child" style="padding-left:' + paddingLeft + 'px">' +
+      esc(card.title) + '</span>';
+    if (hasChildren) {
+      html += '<ul class="pmob-sub">';
+      card.childIds.forEach(function (cid) { html += buildMobileItem(cid, state, depth + 1); });
+      html += '</ul>';
+    }
+    html += '</li>';
     return html;
   }
 

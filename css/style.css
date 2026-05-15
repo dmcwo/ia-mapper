@@ -857,7 +857,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 /* L2+ child items */
 .pmob-item--child {
   font-weight: 400; color: #4F5E7B; font-size: .82rem;
-  border-left: 2px solid #E2E8F0; padding-left: 20px;
+  border-left: 2px solid #E2E8F0;
 }
 .pmob-sub { list-style: none; }
 .pmob-nav li:hover > .pmob-item { background: var(--c-accent-light); color: var(--c-accent); }
