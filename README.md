@@ -44,7 +44,7 @@ You can also run it locally:
 
 ### Loading sample content
 
-Click **[flask-conical] Sample IA** in the header to load an example information architecture.
+Click **Sample IA** in the header to load a real-world information architecture (UC San Diego Library, 7 sections, 40 pages) and see all themes with meaningful content immediately.
 
 ### Building your own IA
 
@@ -56,7 +56,7 @@ Click **[flask-conical] Sample IA** in the header to load an example information
 
 ### Editing cards
 
-Cards can be renamed inline. In **Edit mode** (the [sliders-horizontal] button), action buttons appear on each card for renaming, returning to the Element Box, or deleting.
+Cards can be renamed inline. In **Edit mode** (the Edit mode button in the Architecture Map header), action buttons appear on each card for renaming, returning to the Element Box, or deleting.
 
 ### Keyboard navigation
 
@@ -79,7 +79,7 @@ IAM aims for full keyboard support.
 | `C` | Collapse / expand Element Box |
 | `?` | Show keyboard shortcuts panel |
 
-Press **[keyboard] Keyboard Control** in the header for the full reference.
+Press **Keyboard Control** in the header for the full reference.
 
 ### Import / Export
 
