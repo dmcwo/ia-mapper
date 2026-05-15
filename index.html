@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IAM — Information Architecture Mapper</title>
 
-  <link rel="stylesheet" href="css/style.css?v=20" />
-  <link rel="stylesheet" href="css/ui-skin.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=21" />
+  <link rel="stylesheet" href="css/ui-skin.css?v=7" />
 
   <!-- Active nav theme CSS — href is swapped by preview.js; no href = no request -->
 </head>
@@ -46,7 +46,7 @@
     <section id="preview-section" aria-label="Live menu preview">
       <div class="preview-bar">
 
-        <div class="theme-switcher" role="group" aria-label="Navigation theme style">
+        <div class="theme-switcher" role="group" aria-label="Desktop navigation style">
           <button class="theme-btn active" data-theme="default" aria-pressed="true">Single row</button>
           <button class="theme-btn" data-theme="1" aria-pressed="false">Two row</button>
           <button class="theme-btn" data-theme="4" aria-pressed="false">Compact</button>
@@ -56,11 +56,9 @@
 
         <div class="preview-bar__sep" aria-hidden="true"></div>
 
-        <div class="viewport-toggle" role="group" aria-label="Preview viewport size">
-          <button class="vp-btn active" data-vp="desktop" aria-pressed="true">Desktop</button>
-          <button class="vp-btn" data-vp="laptop" aria-pressed="false">Laptop</button>
-          <button class="vp-btn" data-vp="mobile" aria-pressed="false">Mobile</button>
-        </div>
+        <button class="theme-btn" data-theme="mobile" aria-pressed="false">
+          <i data-lucide="smartphone" aria-hidden="true"></i> Mobile
+        </button>
 
       </div>
       <div id="preview-frame" data-vp="desktop" role="region" aria-label="Navigation structure preview">
@@ -308,7 +306,7 @@
   <script src="js/state.js?v=14"></script>
   <script src="js/eb.js?v=13"></script>
   <script src="js/am.js?v=21"></script>
-  <script src="js/preview.js?v=20"></script>
+  <script src="js/preview.js?v=21"></script>
   <script src="js/export.js?v=13"></script>
   <script src="js/import.js?v=13"></script>
   <script src="js/sample.js?v=1"></script>

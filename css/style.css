@@ -245,20 +245,6 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .preview-opt-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .preview-opt-btn:disabled { opacity: .35; cursor: default; }
 
-/* ── Viewport toggle ────────────────────────────────────────── */
-.viewport-toggle { display: flex; gap: 2px; }
-.vp-btn {
-  padding: 2px 9px; font-size: .74rem; font-weight: 500;
-  min-height: 44px;
-  border-radius: 4px; border: 1px solid var(--c-border);
-  background: var(--c-surface); color: var(--c-text-muted);
-  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
-}
-.vp-btn:hover { background: var(--c-bg); color: var(--c-text); }
-.vp-btn.active, .vp-btn[aria-pressed="true"] {
-  background: var(--c-accent); color: #fff; border-color: var(--c-accent-dark);
-}
-.vp-btn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 
 #preview-frame {
   flex: 1; overflow: visible;
@@ -643,7 +629,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   width: 100%;
   height: 58px;
 }
-#preview-frame[data-vp="laptop"] .pnav-wrapper { height: 50px; }
+
 
 .pnav-brand {
   display: flex; align-items: center;
@@ -678,7 +664,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   border-bottom: 3px solid transparent;
   transition: color .12s, border-color .12s;
 }
-#preview-frame[data-vp="laptop"] .preview-nav > li > .pnav-item { padding: 0 12px; font-size: .9rem; }
+
 
 .preview-nav > li:hover > .pnav-item {
   color: var(--c-accent);
@@ -797,7 +783,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
   padding: 8px 10px 8px 14px;
   background: #fff;
 }
-.pmob-brand { font-size: .85rem; font-weight: 700; color: #1C2333; }
+.pmob-brand { font-size: .9rem; font-weight: 700; color: #1C2333; }
 
 /* Hamburger — interactive, icon swaps to X when open */
 .preview-hamburger {
@@ -834,7 +820,7 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 .pmob-section-btn {
   display: flex; align-items: center; justify-content: space-between;
   width: 100%; padding: 9px 12px 9px 16px;
-  font-size: .84rem; font-weight: 600; color: #374151;
+  font-size: .9rem; font-weight: 600; color: #374151;
   background: none; border: none; cursor: pointer; text-align: left;
   transition: background var(--t-fast), color var(--t-fast);
 }
@@ -851,12 +837,12 @@ dialog::backdrop { background: rgba(28,35,51,.45); }
 /* L1 leaf items */
 .pmob-item {
   display: block; padding: 9px 16px;
-  font-size: .84rem; font-weight: 500; color: #374151;
+  font-size: .9rem; font-weight: 500; color: #374151;
   cursor: default;
 }
 /* L2+ child items */
 .pmob-item--child {
-  font-weight: 400; color: #4F5E7B; font-size: .82rem;
+  font-weight: 400; color: #4F5E7B; font-size: .875rem;
   border-left: 2px solid #E2E8F0;
 }
 .pmob-sub { list-style: none; }
