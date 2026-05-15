@@ -336,6 +336,12 @@
     _state = _empty();
   }
 
+  function replace(newState) {
+    _snap();
+    _state = _clone(newState);
+    _notify();
+  }
+
   function subscribe(fn) { _subscribers.push(fn); }
   function getState() { return _state; }
   function getCard(id) { return _state.cards[id]; }
@@ -349,6 +355,7 @@
     reorderEB: reorderEB,
     clearAM: clearAM, clearEB: clearEB, deleteAllAM: deleteAllAM,
     toggleUtility: toggleUtility,
+    replace: replace,
     undo: undo, redo: redo,
     load: load, subscribe: subscribe,
     canUndo: canUndo, canRedo: canRedo
