@@ -1,17 +1,16 @@
 # IAM — Information Architecture Mapper
 
-A browser-based tool for planning and visualising website navigation structures. Build an information architecture by organising page cards into a hierarchy, then preview how it would look across five navigation styles — all without writing a line of code.
+A browser-based tool for planning and visualising website navigation structures. Build an information architecture by organising page cards into a hierarchy, then preview how it would look across five navigation styles.
 
 ---
 
-## What it does
+## Workspaces: Element Box and Architecture Map
 
-**IAM** gives you two connected workspaces:
+**IAM** gives you three connected workspaces:
 
 - **Element Box** — a holding area for page/section name cards. Add names one per line, drag them out to build your IA, or drag them back when you change your mind.
 - **Architecture Map** — a tree editor where you arrange cards into a hierarchy. Drag cards under other cards to create parent–child relationships. A drop-indicator line shows exactly where each card will land.
-
-As you build, a **live preview** at the top of the page renders your IA as a real navigation component in your chosen style. Switch styles and viewport sizes to check how the structure translates across contexts.
+-- As you build, a **live preview** at the top of the page renders your IA as a navigation component in your chosen theme. Switch themes and viewport sizes to check how the structure translates across contexts.
 
 ---
 
@@ -19,10 +18,10 @@ As you build, a **live preview** at the top of the page renders your IA as a rea
 
 | Button | Style | Notes |
 |--------|-------|-------|
-| Single row | Default single-bar nav | Hover reveals nested flyout menus |
+| Single row | Default single-bar nav | Hover reveals nested flyout menus. Utility items in the same row as main nav |
 | Two row | Utility bar + primary nav | Utility items in a slim bar above |
 | Compact | Sticky single-row with flyouts | Two-level flyout panels; good for dense structures |
-| Mega | UCLA-style mega menu | Dark panel; columns align under tabs; yellow active indicator; column dimming on hover |
+| Mega | Mega menu showing all menus on hover | Dark panel; columns align under tabs; yellow active indicator; column dimming on hover |
 | Rich HTML | Card-style dropdown | Each parent opens a two-column grid of icon + title cards |
 
 Use the **Desktop / Laptop / Mobile** buttons to preview at different viewport widths.
@@ -31,20 +30,13 @@ Use the **Desktop / Laptop / Mobile** buttons to preview at different viewport w
 
 ## Getting started
 
-IAM runs entirely in the browser — no build step, no server required for basic use.
+IAM runs entirely in your browser by visiting https://dmcwo.github.io/ia-mapper/
 
-```bash
-# Clone the repo
-git clone <repo-url>
-cd ia-mapper
+You can also run it locally:
 
-# Serve locally (any static file server works)
-npx serve .
-# or
-python3 -m http.server 8765
-```
-
-Then open `http://localhost:8765` (or whichever port your server uses).
+1. Visit https://github.com/dmcwo/ia-mapper 
+2. Download the repository to your local computer
+3. Open the index.html file from your browser
 
 ---
 
@@ -52,14 +44,14 @@ Then open `http://localhost:8765` (or whichever port your server uses).
 
 ### Loading sample content
 
-Click **[flask-conical] Sample IA** in the header to load a real-world information architecture (UC San Diego Library, 7 sections, 40 pages) and see all themes with meaningful content immediately.
+Click **[flask-conical] Sample IA** in the header to load an example information architecture.
 
 ### Building your own IA
 
 1. Type page or section names in the **Element Box** input, one per line. Press **Shift+Enter** or click **+ Add**.
 2. Drag cards from the Element Box into the **Architecture Map**. Drop onto the root zone to add a top-level page.
 3. Drag a card onto the left portion of an existing card to place it **before or after** it; drag onto the right portion to make it a **child** of that card.
-4. Click **+ Add Utility Menu** to add a separate utility navigation zone (for items like "Contact", "Login", "Help").
+4. 	Add items to the **+ Add Utility Menu** area to add a separate utility navigation zone (for items like "Contact", "Login", "Help"). Removing all items from this area will remove it from the live preview.
 5. Type a **Site name** in the Architecture Map header — it appears as the brand/logo in every preview theme.
 
 ### Editing cards
@@ -68,7 +60,7 @@ Cards can be renamed inline. In **Edit mode** (the [sliders-horizontal] button),
 
 ### Keyboard navigation
 
-Full keyboard support — no mouse required.
+IAM aims for full keyboard support.
 
 | Key | Action |
 |-----|--------|
@@ -106,7 +98,7 @@ ia-mapper/
 ├── css/
 │   ├── style.css       # Base design tokens and component styles
 │   ├── ui-skin.css     # Warm terracotta theme overrides
-│   ├── theme-mega-v2.css        # Mega menu theme (UCLA-style)
+│   ├── theme-mega-v2.css        # Mega menu theme
 │   ├── theme-4-compact-sticky.css  # Compact sticky theme
 │   ├── theme-5-rich-dropdown.css   # Rich HTML card-dropdown theme
 │   └── theme-1-utility-dropdown.css # (legacy, unused by current themes)
@@ -136,7 +128,7 @@ ia-mapper/
 
 ## Accessibility
 
-- WCAG 2.1 AA compliant throughout; key interactive areas target AAA (7:1 contrast).
+- IAM aspires to be WCAG 2.1 AA compliant throughout; key interactive areas target AAA (7:1 contrast).
 - Full keyboard navigation with ARIA tree semantics on the Architecture Map.
 - Skip-to-main-content link on every page.
 - All touch targets meet WCAG 2.5.5 (44 × 44 px minimum).
