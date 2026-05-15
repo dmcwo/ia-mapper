@@ -1,0 +1,244 @@
+/* ── Theme 2 v2: UCLA-style Mega Menu ──────────────────────────
+   Tab-width = column-width alignment, spacer element, dark panel,
+   fade-in on hover, yellow indicator, column dimming.
+   Class prefix: pmega-
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+  --pmega-col-w:      180px;
+  --pmega-bar-bg:     #003778;
+  --pmega-panel-bg:   #003778;
+  --pmega-border:     rgba(255,255,255,.12);
+  --pmega-bright:     rgba(255,255,255,.95);
+  --pmega-dim:        rgba(255,255,255,.50);
+  --pmega-indicator:  #FFE800;
+  --pmega-t:          0.18s ease;
+}
+
+/* ── Wrapper ─────────────────────────────────────────────────── */
+.pmega-nav {
+  position: relative;
+  background: var(--pmega-bar-bg);
+  font-size: 0.875rem;
+  font-family: inherit;
+  user-select: none;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────── */
+.pmega-bar {
+  display: flex;
+  align-items: stretch;
+  min-height: 52px;
+}
+
+/* ── Brand ───────────────────────────────────────────────────── */
+.pmega-brand {
+  color: var(--pmega-bright);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Tab list ────────────────────────────────────────────────── */
+.pmega-tab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.pmega-tab {
+  position: relative;
+  display: flex;
+}
+
+/* Tab button (has children) */
+.pmega-tab-btn {
+  width: var(--pmega-col-w);
+  height: 100%;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pmega-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  transition: color var(--pmega-t);
+  box-sizing: border-box;
+}
+
+.pmega-tab-btn:hover {
+  color: var(--pmega-bright);
+}
+
+/* Yellow underline indicator — slides in on is-active */
+.pmega-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--pmega-indicator);
+  transform: scaleX(0);
+  transition: transform 0.15s ease;
+  pointer-events: none;
+}
+
+.pmega-tab.is-active .pmega-tab-btn {
+  color: var(--pmega-bright);
+}
+
+.pmega-tab.is-active .pmega-tab-btn::after {
+  transform: scaleX(1);
+}
+
+/* Tab link (no children — plain nav item, same fixed width as tab-btn) */
+.pmega-tab-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pmega-col-w);
+  height: 100%;
+  padding: 0 12px;
+  color: var(--pmega-dim);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  transition: color var(--pmega-t);
+}
+
+.pmega-tab-link:hover {
+  color: var(--pmega-bright);
+}
+
+/* ── Utility links ───────────────────────────────────────────── */
+.pmega-utility {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pmega-util-link {
+  color: var(--pmega-dim);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transition: color var(--pmega-t), background var(--pmega-t);
+}
+
+.pmega-util-link:hover {
+  color: var(--pmega-bright);
+  background: rgba(255,255,255,.08);
+}
+
+/* ── Mega panel ──────────────────────────────────────────────── */
+.pmega-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--pmega-panel-bg);
+  border-top: 1px solid var(--pmega-border);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  z-index: 100;
+
+  /* Hidden by default — fade + slide up */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--pmega-t),
+    visibility var(--pmega-t),
+    transform var(--pmega-t);
+}
+
+/* Show on nav hover */
+.pmega-nav:hover .pmega-panel {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pmega-panel-inner {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px 0 24px;
+}
+
+/* Spacer: width set by JS to equal the brand area's offsetWidth */
+.pmega-spacer {
+  flex-shrink: 0;
+}
+
+.pmega-cols {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+}
+
+/* ── Individual column ───────────────────────────────────────── */
+.pmega-col {
+  width: var(--pmega-col-w);
+  flex-shrink: 0;
+  padding: 0 16px;
+  border-right: 1px solid var(--pmega-border);
+  transition: opacity 0.15s ease;
+  box-sizing: border-box;
+}
+
+.pmega-col:last-child {
+  border-right: none;
+}
+
+/* Dimming: all dim → active one brightens */
+.pmega-cols.has-active .pmega-col {
+  opacity: 0.30;
+}
+
+.pmega-cols.has-active .pmega-col.is-active {
+  opacity: 1;
+}
+
+/* ── Column links ────────────────────────────────────────────── */
+.pmega-col-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pmega-col-link {
+  display: block;
+  padding: 5px 6px;
+  color: var(--pmega-bright);
+  text-decoration: none;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  border-radius: 4px;
+  transition: background var(--pmega-t);
+}
+
+.pmega-col-link:hover {
+  background: rgba(255,255,255,.10);
+}
