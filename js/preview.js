@@ -5,7 +5,6 @@
 (function () {
   'use strict';
 
-  var currentVP    = 'desktop';
   var currentTheme = 'default';
   var siteName     = 'Site'; // customizable via the site name input field
 
@@ -33,7 +32,7 @@
       return;
     }
 
-    content.innerHTML = currentVP === 'mobile'
+    content.innerHTML = currentTheme === 'mobile'
       ? buildMobilePreview(state)
       : buildDesktopPreview(state);
 
@@ -416,8 +415,8 @@
 
     var frame = document.getElementById('preview-frame');
     if (frame) {
-      // Two-tier uses Default nav styles — no themed frame overrides needed
-      var isThemed = theme !== 'default' && theme !== '1';
+      frame.dataset.vp = theme === 'mobile' ? 'mobile' : 'desktop';
+      var isThemed = theme !== 'default' && theme !== '1' && theme !== 'mobile';
       frame.classList.toggle('themed', isThemed);
     }
 
@@ -436,19 +435,6 @@
     link.rel  = 'stylesheet';
     link.href = file;
     document.head.appendChild(link);
-  }
-
-  /* ── Viewport toggle ─────────────────────────────────────── */
-  function setViewport(vp) {
-    currentVP = vp;
-    var frame = document.getElementById('preview-frame');
-    if (frame) frame.dataset.vp = vp;
-    document.querySelectorAll('.vp-btn').forEach(function (btn) {
-      var active = btn.dataset.vp === vp;
-      btn.classList.toggle('active', active);
-      btn.setAttribute('aria-pressed', String(active));
-    });
-    render();
   }
 
   /* ── Mobile nav interactions ────────────────────────────────
@@ -590,10 +576,6 @@
 
   /* ── Init ────────────────────────────────────────────────── */
   function init() {
-    document.querySelectorAll('.vp-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { setViewport(btn.dataset.vp); });
-    });
-
     document.querySelectorAll('.theme-btn').forEach(function (btn) {
       btn.addEventListener('click', function () { setTheme(btn.dataset.theme); });
     });
