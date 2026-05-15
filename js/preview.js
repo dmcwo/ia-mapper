@@ -9,11 +9,15 @@
   var currentTheme = 'default';
   var siteName     = 'Site'; // customizable via the site name input field
 
+  /* Called after render to align the mega panel spacer with the brand width.
+     Assigned by initMegaHighlight(); no-op until then.                       */
+  var alignMegaSpacer = function() {};
+
   /* Theme '1' = Two-tier  (no external CSS — uses Default nav style)
-     Theme '2' = Mega       (reuses theme-1 utility-dropdown CSS)
+     Theme '2' = Mega       (UCLA-style, pmega- prefix)
      Theme '4' = Compact    (compact-sticky CSS)                    */
   var THEME_CSS_FILE = {
-    '2': 'css/theme-1-utility-dropdown.css',
+    '2': 'css/theme-mega-v2.css',
     '4': 'css/theme-4-compact-sticky.css',
     '5': 'css/theme-5-rich-dropdown.css'
   };
@@ -32,6 +36,8 @@
     content.innerHTML = currentVP === 'mobile'
       ? buildMobilePreview(state)
       : buildDesktopPreview(state);
+
+    if (currentTheme === '2') requestAnimationFrame(alignMegaSpacer);
   }
 
   /* ── Route to the right desktop builder ─────────────────── */
@@ -117,64 +123,72 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     THEME 2 — Mega menu
-     Styled header (utility-dropdown CSS) + full-width dark panel.
-     All nav items with children show the shared mega panel;
-     no individual flyout dropdowns.
+     THEME 2 — Mega menu (UCLA-style)
+     Dark nav bar with fixed-width tabs aligned to panel columns.
+     Spacer element maintains brand-area offset. Panel fades in on
+     nav hover; yellow indicator + column dimming on tab hover.
      ══════════════════════════════════════════════════════════ */
   function buildThemeMega(state) {
     var hasUtil = state.utilityEnabled && state.utilityIds.length > 0;
 
-    var html = '<header class="site-header site-header--mega">';
+    var html = '<div class="pmega-nav"><div class="pmega-bar">' +
+      '<div class="pmega-brand">' + esc(siteName) + '</div>' +
+      '<nav aria-label="Primary navigation"><ul class="pmega-tab-list">';
 
-    /* ── Row 1: Utility bar ──────────────────────────────────── */
-    if (hasUtil) {
-      html += '<div class="utility-bar"><div class="utility-bar__inner">' +
-        '<nav class="utility-nav" aria-label="Utility navigation"><ul class="utility-nav__list">';
-      state.utilityIds.forEach(function (id) {
-        var c = state.cards[id];
-        if (c) html += '<li class="utility-nav__item"><a class="utility-nav__link">' + esc(c.title) + '</a></li>';
-      });
-      html += '</ul></nav></div></div>';
-    }
-
-    /* ── Row 2: Brand row (logo only, white bg) ──────────────── */
-    html += '<div class="mega-brand-row">' +
-      '<span class="site-logo-text">' + esc(siteName) + '</span>' +
-      '</div>';
-
-    /* ── Row 3: Full-width nav row (dark bg, equal-width items)
-       Items WITH children get data-mega-col so JS can highlight
-       the matching panel column on hover.                        */
     var colIdx = 0;
-    var navItems = '';
-    state.rootIds.forEach(function (id) {
+    state.rootIds.forEach(function(id) {
       var card = state.cards[id];
       if (!card) return;
       if (card.childIds.length > 0) {
-        navItems += '<li class="primary-nav__item" data-mega-col="' + colIdx + '">' +
-          '<button class="primary-nav__link primary-nav__link--parent">' +
-          esc(card.title) + '</button></li>';
+        html += '<li class="pmega-tab pmega-tab--has-col" data-col="' + colIdx + '">' +
+          '<button class="pmega-tab-btn">' + esc(card.title) + '</button></li>';
         colIdx++;
       } else {
-        navItems += '<li class="primary-nav__item"><a class="primary-nav__link">' + esc(card.title) + '</a></li>';
+        html += '<li class="pmega-tab"><a class="pmega-tab-link">' + esc(card.title) + '</a></li>';
       }
     });
 
-    /* Nav row: full-width background, but content is max-width-constrained
-       via .mega-nav-row__inner so text never runs to the screen edges.
-       The panel is a sibling of the inner wrapper (not inside it) so its
-       left:0/right:0 still covers the full row width for the background,
-       while its inner content also uses the same max-width constraint.   */
-    html += '<div class="mega-nav-row">' +
-      '<div class="mega-nav-row__inner">' +
-      '<nav class="primary-nav primary-nav--has-mega" aria-label="Primary navigation">' +
-      '<ul class="primary-nav__list">' + navItems + '</ul></nav>' +
-      '</div>' +
-      buildMegaPanel(state) +
-      '</div>';
+    html += '</ul></nav>';
 
-    html += '</header>';
+    if (hasUtil) {
+      html += '<div class="pmega-utility">';
+      state.utilityIds.forEach(function(id) {
+        var c = state.cards[id];
+        if (c) html += '<a class="pmega-util-link">' + esc(c.title) + '</a>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>'; // .pmega-bar
+
+    /* ── Panel: columns aligned under tabs via spacer ─────────── */
+    var hasCols = false;
+    var cols = '';
+    var colIdx2 = 0;
+    state.rootIds.forEach(function(id) {
+      var card = state.cards[id];
+      if (!card || card.childIds.length === 0) return;
+      hasCols = true;
+      cols += '<div class="pmega-col" data-col="' + colIdx2 + '">' +
+        '<ul class="pmega-col-list">';
+      card.childIds.forEach(function(cid) {
+        var child = state.cards[cid];
+        if (!child) return;
+        cols += '<li><a class="pmega-col-link">' + esc(child.title) + '</a></li>';
+      });
+      cols += '</ul></div>';
+      colIdx2++;
+    });
+
+    if (hasCols) {
+      html += '<div class="pmega-panel">' +
+        '<div class="pmega-panel-inner">' +
+        '<div class="pmega-spacer"></div>' +
+        '<div class="pmega-cols">' + cols + '</div>' +
+        '</div></div>';
+    }
+
+    html += '</div>'; // .pmega-nav
     return html;
   }
 
@@ -261,35 +275,6 @@
     var indicator = ' <span class="dropdown-sub-arrow" aria-hidden="true">›</span>';
     return '<li class="dropdown-menu__item">' +
       '<a class="dropdown-menu__link dropdown-menu__link--sub">' + esc(card.title) + indicator + '</a></li>';
-  }
-
-  /* ── Shared mega panel builder ───────────────────────────────
-     One column per L1 item that has children.
-     L2 items are shown as flat links — no sub-navigation.
-     Modelled on UCLA Library's mega menu pattern.             */
-  function buildMegaPanel(state) {
-    var cols = '';
-    var colIdx = 0;
-    state.rootIds.forEach(function (id) {
-      var card = state.cards[id];
-      if (!card || card.childIds.length === 0) return;
-      cols += '<div class="mega-col" data-mega-col="' + colIdx + '">';
-      // No column header — the nav bar item above is the visual label.
-      // Adding the title again here would duplicate every L1 name.
-      cols += '<ul class="mega-col__list">';
-      card.childIds.forEach(function (cid) {
-        var child = state.cards[cid];
-        if (!child) return;
-        var hasSub = child.childIds && child.childIds.length > 0;
-        cols += '<li><a class="mega-col__link">' + esc(child.title) +
-          (hasSub ? ' <span class="mega-col__sub-arrow" aria-hidden="true">›</span>' : '') +
-          '</a></li>';
-      });
-      cols += '</ul></div>';
-      colIdx++;
-    });
-    if (!cols) return '';
-    return '<div class="preview-mega-panel"><div class="mega-panel__inner">' + cols + '</div></div>';
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -484,35 +469,56 @@
   }
 
   /* ── Mega column highlight (UCLA-style hover) ───────────────
-     Mouseenter on a nav item with [data-mega-col] → dim all
-     columns, brighten the matching one.
-     Mouseleave of the whole .site-header--mega → reset.        */
+     Mouseenter on a .pmega-tab--has-col → yellow indicator + dim
+     all other columns, brighten the matching one.
+     Mouseleave of .pmega-nav → reset all state.               */
   function initMegaHighlight() {
     var content = document.getElementById('preview-content');
     if (!content) return;
 
-    content.addEventListener('mouseenter', function (e) {
-      if (currentTheme !== '2') return;
-      var item = e.target && e.target.closest && e.target.closest('.primary-nav__item[data-mega-col]');
-      if (!item) return;
-      var panel = content.querySelector('.preview-mega-panel');
-      if (!panel) return;
-      var colIdx = item.getAttribute('data-mega-col');
-      panel.classList.add('mega-panel--has-active');
-      panel.querySelectorAll('.mega-col').forEach(function (c) { c.classList.remove('mega-col--active'); });
-      var col = panel.querySelector('.mega-col[data-mega-col="' + colIdx + '"]');
-      if (col) col.classList.add('mega-col--active');
-    }, true /* capture so it fires before display:none hides child */);
+    /* Align the panel spacer so the first column sits directly under
+       the first parent tab, regardless of how many leaf tabs precede it. */
+    alignMegaSpacer = function() {
+      var firstTab   = content.querySelector('.pmega-tab--has-col .pmega-tab-btn');
+      var panelInner = content.querySelector('.pmega-panel-inner');
+      var spacer     = content.querySelector('.pmega-spacer');
+      if (!firstTab || !panelInner || !spacer) return;
+      var tabLeft   = firstTab.getBoundingClientRect().left;
+      var innerLeft = panelInner.getBoundingClientRect().left;
+      spacer.style.width = Math.max(0, tabLeft - innerLeft) + 'px';
+    };
 
-    content.addEventListener('mouseleave', function (e) {
+    content.addEventListener('mouseenter', function(e) {
       if (currentTheme !== '2') return;
-      var header = e.target && e.target.closest && e.target.closest('.site-header--mega');
-      if (!header) return;
-      var panel = content.querySelector('.preview-mega-panel');
-      if (!panel) return;
-      panel.classList.remove('mega-panel--has-active');
-      panel.querySelectorAll('.mega-col').forEach(function (c) { c.classList.remove('mega-col--active'); });
+      var tab = e.target && e.target.closest && e.target.closest('.pmega-tab--has-col');
+      if (!tab) return;
+      alignMegaSpacer();
+      var colIdx = tab.getAttribute('data-col');
+      /* Tabs */
+      content.querySelectorAll('.pmega-tab--has-col').forEach(function(t) { t.classList.remove('is-active'); });
+      tab.classList.add('is-active');
+      /* Columns */
+      var cols = content.querySelector('.pmega-cols');
+      if (!cols) return;
+      cols.classList.add('has-active');
+      cols.querySelectorAll('.pmega-col').forEach(function(c) { c.classList.remove('is-active'); });
+      var col = cols.querySelector('.pmega-col[data-col="' + colIdx + '"]');
+      if (col) col.classList.add('is-active');
     }, true);
+
+    content.addEventListener('mouseleave', function(e) {
+      if (currentTheme !== '2') return;
+      var nav = e.target && e.target.closest && e.target.closest('.pmega-nav');
+      if (!nav) return;
+      content.querySelectorAll('.pmega-tab--has-col').forEach(function(t) { t.classList.remove('is-active'); });
+      var cols = content.querySelector('.pmega-cols');
+      if (cols) {
+        cols.classList.remove('has-active');
+        cols.querySelectorAll('.pmega-col').forEach(function(c) { c.classList.remove('is-active'); });
+      }
+    }, true);
+
+    window.addEventListener('resize', alignMegaSpacer);
   }
 
   /* ── Init ────────────────────────────────────────────────── */
