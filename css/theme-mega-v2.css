@@ -5,7 +5,7 @@
    ────────────────────────────────────────────────────────────── */
 
 :root {
-  --pmega-col-w:      180px;
+  --pmega-col-w:      200px;
   --pmega-bar-bg:     #003778;
   --pmega-panel-bg:   #003778;
   --pmega-border:     rgba(255,255,255,.12);
@@ -28,7 +28,7 @@
 .pmega-bar {
   display: flex;
   align-items: stretch;
-  min-height: 52px;
+  height: 52px;
 }
 
 /* ── Brand ───────────────────────────────────────────────────── */
@@ -44,17 +44,27 @@
 }
 
 /* ── Tab list ────────────────────────────────────────────────── */
+
+/* The <nav> element is a flex item inside .pmega-bar; it must be
+   display:flex so .pmega-tab-list can inherit the bar's height. */
+.pmega-bar > nav {
+  display: flex;
+  height: 100%;
+}
+
 .pmega-tab-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   align-items: stretch;
+  height: 100%;
 }
 
 .pmega-tab {
   position: relative;
   display: flex;
+  align-items: stretch;
 }
 
 /* Tab button (has children) */
