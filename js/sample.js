@@ -8,6 +8,8 @@
 
   var SAMPLE_SITE_NAME = 'UC San Diego Library';
 
+  var SAMPLE_UTILITY = ['Ask Us', 'My Account'];
+
   var SAMPLE_IA = [
     { title: 'Research & Collections', children: [
       'Find Books, Articles & More',
@@ -76,9 +78,20 @@
       rootIds: [],
       ebIds: [],
       utilityIds: [],
-      utilityEnabled: false,
+      utilityEnabled: true,
       nextId: 1
     };
+
+    SAMPLE_UTILITY.forEach(function (title, order) {
+      var id = uid();
+      state.cards[id] = {
+        id: id, title: title, description: '',
+        location: 'am', parentId: null,
+        childIds: [], nestedIds: [], nestedInId: null,
+        order: order
+      };
+      state.utilityIds.push(id);
+    });
 
     SAMPLE_IA.forEach(function (item, parentOrder) {
       var parentId  = uid();
