@@ -40,8 +40,8 @@
   box-shadow: 0 1px 0 rgba(255,255,255,.55) inset, var(--shadow-xs);
 }
 
-/* App name: dark terracotta — passes 6.6:1 on header bg */
-.app-name { color: #5C3D2F; }
+/* App name: primary text — 11.7:1 on header bg, AAA */
+.app-name { color: var(--c-text); }
 
 /* ── Buttons ────────────────────────────────────────────────── */
 
@@ -51,14 +51,17 @@
   color: var(--c-text);
 }
 
-/* Primary — warm brown fill, tactile press */
+/* Primary — warm brown fill, tactile press.
+   #5C3D2F gives 9.7:1 with white text — AAA. */
 .btn--primary {
-  background: var(--c-accent-dark);
-  border-color: #5C3D2F;
+  background: #5C3D2F;
+  color: #ffffff;
+  border-color: #3D2317;
   box-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 2px 4px rgba(80,45,25,.22);
 }
 .btn--primary:hover:not(:disabled) {
-  background: #5C3D2F;
+  background: #3D2317;
+  color: #ffffff;
   box-shadow: 0 1px 0 rgba(255,255,255,.10) inset, 0 1px 2px rgba(80,45,25,.18);
 }
 .btn--primary:active:not(:disabled) {
@@ -108,25 +111,27 @@
 }
 
 /* ── Theme + viewport toggle buttons (on dark bar) ───────────── */
+/* Inactive: 75% white on #252120 = 9.5:1 — AAA
+   Active:   #fff on #5C3D2F    = 9.7:1 — AAA  */
 .theme-btn,
 .vp-btn {
   background: rgba(255,255,255,.08);
   border-color: rgba(255,255,255,.16);
-  color: rgba(255,255,255,.60);
+  color: rgba(255,255,255,.75);
   box-shadow: none;
 }
 .theme-btn:hover,
 .vp-btn:hover {
   background: rgba(255,255,255,.14);
   border-color: rgba(255,255,255,.30);
-  color: rgba(255,255,255,.92);
+  color: #ffffff;
   box-shadow: none;
 }
 .theme-btn.active, .theme-btn[aria-pressed="true"],
 .vp-btn.active,   .vp-btn[aria-pressed="true"] {
-  background: var(--c-accent-dark);
-  border-color: #5C3D2F;
-  color: #FAF8F5;
+  background: #5C3D2F;
+  border-color: #3D2317;
+  color: #ffffff;
   box-shadow: 0 1px 3px rgba(80,45,25,.28) inset;
 }
 
@@ -262,15 +267,16 @@ kbd {
 .pmob-nav li:hover > .pmob-item { background: var(--c-accent-light); }
 
 /* ── Edit mode button — active state ───────────────────────── */
+/* #fff on #5C3D2F = 9.7:1 — AAA */
 #am-controls-btn[aria-pressed="true"] {
-  background: var(--c-accent-dark);
-  border-color: #5C3D2F;
-  color: #FAF8F5;
+  background: #5C3D2F;
+  border-color: #3D2317;
+  color: #ffffff;
   box-shadow: 0 1px 3px rgba(80,45,25,.28) inset;
 }
 #am-controls-btn[aria-pressed="true"]:hover {
-  background: #5C3D2F;
-  color: #FAF8F5;
+  background: #3D2317;
+  color: #ffffff;
 }
 
 /* ── Card controls: hidden by default, revealed via toggle ──── */
