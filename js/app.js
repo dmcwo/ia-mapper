@@ -154,10 +154,42 @@
       });
     }
 
+    /* shared by Sample and Import handlers */
+    var importDlg = document.getElementById('import-confirm-dialog');
+
+    /* ── Sample IA ── */
+    var sampleBtn = document.getElementById('sample-btn');
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', function () {
+        var s = State.getState();
+        var hasContent = s.rootIds.length || s.utilityIds.length || s.ebIds.length;
+        function doLoad() {
+          Sample.load();
+          renderAll();
+          announce('Sample IA loaded.');
+        }
+        if (hasContent && importDlg) {
+          importDlg.showModal();
+          var okBtn  = document.getElementById('import-confirm-ok');
+          var canBtn = document.getElementById('import-confirm-cancel');
+          function cleanup() {
+            okBtn.removeEventListener('click', onOk);
+            canBtn.removeEventListener('click', onCancel);
+          }
+          function onOk()     { cleanup(); importDlg.close(); doLoad(); }
+          function onCancel() { cleanup(); importDlg.close(); }
+          okBtn.addEventListener('click', onOk);
+          canBtn.addEventListener('click', onCancel);
+          importDlg.addEventListener('cancel', onCancel, { once: true });
+        } else {
+          doLoad();
+        }
+      });
+    }
+
     /* ── Import ── */
     var importBtn   = document.getElementById('import-btn');
     var importInput = document.getElementById('import-file-input');
-    var importDlg   = document.getElementById('import-confirm-dialog');
 
     if (importBtn && importInput) {
       importBtn.addEventListener('click', function () {
