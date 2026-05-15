@@ -1,6 +1,6 @@
 # IAM — Information Architecture Mapper
 
-A browser-based tool for planning and visualising website navigation structures. Build an information architecture by organising page cards into a hierarchy, then preview how it would look across five navigation styles.
+A browser-based tool for planning and visualising website navigation structures. Build an information architecture by organising page cards into a hierarchy, then preview how it would look across different navigation menu themes.
 
 ---
 
