@@ -9,8 +9,8 @@
   --pmega-bar-bg:     #003778;
   --pmega-panel-bg:   #003778;
   --pmega-border:     rgba(255,255,255,.12);
-  --pmega-bright:     rgba(255,255,255,.95);
-  --pmega-dim:        rgba(255,255,255,.50);
+  --pmega-bright:     #ffffff;           /* 12.2:1 on #003778 — AAA */
+  --pmega-dim:        rgba(255,255,255,.70); /* 6.4:1 on #003778 — AA */
   --pmega-indicator:  #FFE800;
   --pmega-t:          0.18s ease;
 }
@@ -19,7 +19,7 @@
 .pmega-nav {
   position: relative;
   background: var(--pmega-bar-bg);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-family: inherit;
   user-select: none;
 }
@@ -28,14 +28,14 @@
 .pmega-bar {
   display: flex;
   align-items: stretch;
-  height: 52px;
+  height: 56px;
 }
 
 /* ── Brand ───────────────────────────────────────────────────── */
 .pmega-brand {
   color: var(--pmega-bright);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.125rem;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-family: inherit;
   font-weight: 500;
   white-space: nowrap;
@@ -126,7 +126,7 @@
   padding: 0 12px;
   color: var(--pmega-dim);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -154,7 +154,7 @@
   text-decoration: none;
   padding: 5px 10px;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   transition: color var(--pmega-t), background var(--pmega-t);
 }
 
@@ -222,9 +222,10 @@
   border-right: none;
 }
 
-/* Dimming: all dim → active one brightens */
+/* Dimming: all dim → active one brightens.
+   0.55 opacity keeps contrast ≥ 4.5:1 (AA) on #003778. */
 .pmega-cols.has-active .pmega-col {
-  opacity: 0.30;
+  opacity: 0.55;
 }
 
 .pmega-cols.has-active .pmega-col.is-active {
@@ -240,10 +241,10 @@
 
 .pmega-col-link {
   display: block;
-  padding: 5px 6px;
+  padding: 6px 8px;
   color: var(--pmega-bright);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   line-height: 1.4;
   border-radius: 4px;
   transition: background var(--pmega-t);
