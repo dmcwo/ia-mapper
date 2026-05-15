@@ -347,7 +347,9 @@
       '<div class="preview-mobile-chrome">' +
         '<div class="preview-mobile-bar">' +
           '<span class="pmob-brand">' + esc(siteName) + '</span>' +
-          '<button class="preview-hamburger" aria-label="Open menu">☰</button>' +
+          '<button class="preview-hamburger" aria-label="Open menu" aria-expanded="false">' +
+          '<i data-lucide="menu" aria-hidden="true"></i>' +
+        '</button>' +
         '</div>' +
         '<div class="preview-mobile-panel">' +
           '<nav aria-label="Mobile preview navigation"><ul class="pmob-nav">';
@@ -370,18 +372,25 @@
     var card = state.cards[id];
     if (!card) return '';
     var hasChildren = card.childIds.length > 0;
-    var indent = depth > 0 ? ' style="padding-left:' + (8 + depth * 14) + 'px"' : '';
 
-    var html = '<li>';
-    html += '<span class="pmob-item' + (depth > 0 ? ' pmob-item--child' : '') + '"' + indent + '>';
-    if (depth > 0) html += '<span class="pmob-indent-marker" aria-hidden="true">—</span> ';
-    html += esc(card.title) + '</span>';
-    if (hasChildren) {
-      html += '<ul class="pmob-sub">';
-      card.childIds.forEach(function (cid) { html += buildMobileItem(cid, state, depth + 1); });
-      html += '</ul>';
+    // L1 with children: accordion toggle
+    if (depth === 0 && hasChildren) {
+      var html = '<li class="pmob-section">' +
+        '<button class="pmob-section-btn" aria-expanded="false">' +
+        '<span>' + esc(card.title) + '</span>' +
+        '<i data-lucide="chevron-right" class="pmob-chevron" aria-hidden="true"></i>' +
+        '</button>' +
+        '<ul class="pmob-sub" hidden>';
+      card.childIds.forEach(function (cid) { html += buildMobileItem(cid, state, 1); });
+      html += '</ul></li>';
+      return html;
     }
-    html += '</li>';
+
+    // L1 leaf or any child item
+    var html = '<li>' +
+      '<span class="pmob-item' + (depth > 0 ? ' pmob-item--child' : '') + '">' +
+      esc(card.title) + '</span>' +
+      '</li>';
     return html;
   }
 
@@ -433,6 +442,57 @@
       btn.setAttribute('aria-pressed', String(active));
     });
     render();
+  }
+
+  /* ── Mobile nav interactions ────────────────────────────────
+     Hamburger toggle, accordion expand/collapse, outside-click close.
+     Uses event delegation on preview-content so it survives re-renders. */
+  function initMobileNav() {
+    var content = document.getElementById('preview-content');
+    if (!content) return;
+
+    content.addEventListener('click', function (e) {
+      // Accordion section toggle
+      var sectionBtn = e.target.closest('.pmob-section-btn');
+      if (sectionBtn) {
+        var li  = sectionBtn.parentElement;
+        var sub = li.querySelector(':scope > .pmob-sub');
+        if (!sub) return;
+        var expanded = sectionBtn.getAttribute('aria-expanded') === 'true';
+        sectionBtn.setAttribute('aria-expanded', String(!expanded));
+        sub.hidden = expanded;
+        return;
+      }
+
+      // Hamburger open/close
+      var hamburger = e.target.closest('.preview-hamburger');
+      if (!hamburger) return;
+      var chrome = hamburger.closest('.preview-mobile-chrome');
+      if (!chrome) return;
+      var isOpen = chrome.classList.toggle('menu-open');
+      var icon = hamburger.querySelector('[data-lucide]');
+      if (icon) {
+        icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+        if (window.lucide) lucide.createIcons({ nodes: [hamburger] });
+      }
+      hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.preview-mobile-chrome')) return;
+      var chrome = document.querySelector('.preview-mobile-chrome.menu-open');
+      if (!chrome) return;
+      chrome.classList.remove('menu-open');
+      var hamburger = chrome.querySelector('.preview-hamburger');
+      if (hamburger) {
+        var icon = hamburger.querySelector('[data-lucide]');
+        if (icon) { icon.setAttribute('data-lucide', 'menu'); if (window.lucide) lucide.createIcons({ nodes: [hamburger] }); }
+        hamburger.setAttribute('aria-label', 'Open menu');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
 
   /* ── Sub-menu smart flip (prevent right-edge overflow) ──────
@@ -546,6 +606,7 @@
       });
     }
 
+    initMobileNav();
     initSmartFlip();
     initMegaHighlight();
   }
